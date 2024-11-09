@@ -39,6 +39,8 @@ sudo gh auth login
 sudo ./run-ci.sh
 ```
 
+(GitHub Token should also work, see below)
+
 __For macOS Build Farm:__
 
 Please tell me your Gist ID:
