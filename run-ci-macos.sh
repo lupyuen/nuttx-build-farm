@@ -5,17 +5,6 @@
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-ci-macos.sh
 device=ci
 
-## Set the GitHub Token: export GITHUB_TOKEN=...
-## To create GitHub Token: GitHub Settings > Developer Settings > Tokens (Classic) > Generate New Token (Classic)
-## Check the following:
-## repo (Full control of private repositories)
-## repo:status (Access commit status)
-## repo_deployment (Access deployment status)
-## public_repo (Access public repositories)
-## repo:invite (Access repository invitations)
-## security_events (Read and write security events)
-## gist (Create gists)
-. $HOME/github-token-macos.sh
 set -x  ## Echo commands
 
 ## Get the Script Directory

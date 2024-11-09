@@ -4,6 +4,10 @@
 set -e  #  Exit when any command fails
 set -x  #  Echo commands
 
+## Set the GitHub Token
+## export GITHUB_TOKEN=...
+. $HOME/github-token-macos.sh
+
 ## Run a NuttX CI Job on macOS
 # ./run-job-macos.sh arm-01
 
