@@ -90,8 +90,8 @@ cat <<'EOF' | tr '\n' '\r'
 
 python_tools() {
   #### TODO: We fixed the Python Environment
-  python3 -m venv \/tmp\/nuttx-macos.venv
-  source \/tmp\/nuttx-macos.venv\/bin\/activate
+  python3 -m venv .venv
+  source .venv\/bin\/activate
 
   # workaround for Cython issue
 EOF
