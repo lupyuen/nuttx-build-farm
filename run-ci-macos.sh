@@ -1,10 +1,22 @@
 #!/usr/bin/env bash
-## Run NuttX CI on macOS
+## Run All NuttX CI Jobs on macOS
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
 
-echo Now running https://github.com/lupyuen/nuttx-release/blob/main/run-ci.sh
-set -x  ## Echo commands
+echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-ci-macos.sh
 device=ci
+
+## Set the GitHub Token: export GITHUB_TOKEN=...
+## To create GitHub Token: GitHub Settings > Developer Settings > Tokens (Classic) > Generate New Token (Classic)
+## Check the following:
+## repo (Full control of private repositories)
+## repo:status (Access commit status)
+## repo_deployment (Access deployment status)
+## public_repo (Access public repositories)
+## repo:invite (Access repository invitations)
+## security_events (Read and write security events)
+## gist (Create gists)
+. $HOME/github-token-macos.sh
+set -x  ## Echo commands
 
 ## Get the Script Directory
 script_path="${BASH_SOURCE}"
@@ -24,7 +36,7 @@ function run_job {
   pushd /tmp
   script $log_file \
     $script_option \
-    "$script_dir/run-job.sh $job"
+    $script_dir/run-job-macos.sh $job
   popd
 }
 
@@ -78,8 +90,12 @@ for (( ; ; )); do
     arm-05 arm-06 arm-07 arm-08 \
     arm-09 arm-10 arm-11 arm-12 \
     arm-13 arm-14 \
-    risc-v-02 risc-v-03 \
-    sim-03
+    risc-v-01 risc-v-02 risc-v-03 \
+    risc-v-04 risc-v-05 risc-v-06 \
+    xtensa-01 xtensa-02 \
+    arm64-01 x86_64-01 \
+    sim-01 sim-02 sim-03 \
+    other
   do
     ## Run the CI Job and find errors / warnings
     run_job $job
@@ -94,15 +110,12 @@ for (( ; ; )); do
     upload_log $job $nuttx_hash $apps_hash
     sleep 10
   done
-
-  ## Free up the Docker disk space
-  sudo docker system prune --force
 done
 
 ## Here's how we delete the 20 latest gists
 function delete_gists {
-  local gist_ids=$(sudo gh gist list --limit 20 | cut --fields=1)
+  local gist_ids=$(gh gist list --limit 20 | cut --fields=1)
   for gist_id in $gist_ids; do
-    sudo gh gist delete $gist_id
+    gh gist delete $gist_id
   done
 }
