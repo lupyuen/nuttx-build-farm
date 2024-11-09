@@ -9,7 +9,7 @@ set -e  #  Exit when any command fails
 set -x  #  Echo commands
 
 ## Run All NuttX CI Jobs on macOS
-# ./run-ci-macos.sh
+./run-ci-macos.sh
 
 ## Run One Single NuttX CI Job on macOS
-./run-job-macos.sh arm-01
+# ./run-job-macos.sh arm-01
