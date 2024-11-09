@@ -103,8 +103,8 @@ done
 
 ## Here's how we delete the 20 latest gists
 function delete_gists {
-  local gist_ids=$(gh gist list --limit 20 | cut --fields=1)
-  for gist_id in $gist_ids; do
+  local gist_ids=($(gh gist list --limit 20 | cut -f 1 | xargs))
+  for gist_id in "${gist_ids[@]}"; do
     gh gist delete $gist_id
   done
 }
