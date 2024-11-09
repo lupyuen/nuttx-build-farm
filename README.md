@@ -43,7 +43,7 @@ sudo ./run-ci.sh
 
 (GitHub Token should also work, see below)
 
-__For macOS Build Farm:__
+__To Join macOS Build Farm:__
 
 Please tell me your Gist ID:
 
