@@ -19,11 +19,19 @@ uname -a
 script_path="${BASH_SOURCE}"
 script_dir="$(cd -P "$(dirname -- "${script_path}")" >/dev/null 2>&1 && pwd)"
 
-## Create the Temp Folder
+## Preserve the Tools Folder
 tmp_dir=/tmp/run-job-macos
+tools_dir=$tmp_dir/tools
+if [[ -d $tools_dir ]]; then
+  rm -rf /tmp/tools
+  mv $tools_dir /tmp
+fi
+
+## Create the Temp Folder and restore the Tools Folder
 rm -rf $tmp_dir
 mkdir $tmp_dir
 cd $tmp_dir
+mv /tmp/tools .
 
 ## Checkout NuttX Repo and NuttX Apps
 git clone https://github.com/apache/nuttx
