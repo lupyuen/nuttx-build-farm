@@ -3,9 +3,16 @@
 Read the article...
 - ["Your very own Build Farm for Apache NuttX RTOS"](https://lupyuen.codeberg.page/articles/ci2.html)
 
-__For Ubuntu Build Farm:__
+__Highly Esteemed Members of our NuttX Build Farm:__
 
-See ["Build NuttX for All Target Groups"](https://lupyuen.codeberg.page/articles/ci2.html#build-nuttx-for-all-target-groups)
+1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
+1.  [__lvanasse__](https://gist.github.com/lvanasse) (Ubuntu)
+1.  [__nuttxpr__](https://gist.github.com/nuttxpr) (Ubuntu)
+1.  [__nuttxmacos__](https://gist.github.com/nuttxmacos) (macOS)
+
+__To Join Ubuntu Build Farm:__
+
+See ["Build NuttX for All Target Groups"](https://lupyuen.codeberg.page/articles/ci2.html#build-nuttx-for-all-target-groups), please tell me your Gist ID:
 
 ```bash
 ## TODO: Install Docker Engine
@@ -33,6 +40,8 @@ sudo ./run-ci.sh
 ```
 
 __For macOS Build Farm:__
+
+Please tell me your Gist ID:
 
 ```bash
 ## Install the tools
