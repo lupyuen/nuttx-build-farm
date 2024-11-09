@@ -12,7 +12,7 @@ __Highly Esteemed Members of our NuttX Build Farm:__
 
 __To Join Ubuntu Build Farm:__
 
-See ["Build NuttX for All Target Groups"](https://lupyuen.codeberg.page/articles/ci2.html#build-nuttx-for-all-target-groups), please tell me your Gist ID:
+Please tell me your Gist ID. See ["Build NuttX for All Target Groups"](https://lupyuen.codeberg.page/articles/ci2.html#build-nuttx-for-all-target-groups).
 
 ```bash
 ## TODO: Install Docker Engine
