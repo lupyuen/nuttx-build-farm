@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 ## Run a NuttX CI Job on macOS
+## To re-download the toolchain: rm -rf /tmp/run-job-macos
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-job-macos.sh
 echo Called by https://github.com/lupyuen/nuttx-build-farm/blob/main/run-ci-macos.sh
+echo utc_time=$(date -u +'%Y-%m-%dT%H:%M:%S')
+echo local_time=$(date +'%Y-%m-%dT%H:%M:%S')
 
 set -e  #  Exit when any command fails
 set -x  #  Echo commands
@@ -31,7 +34,9 @@ fi
 rm -rf $tmp_dir
 mkdir $tmp_dir
 cd $tmp_dir
-mv /tmp/tools .
+if [[ -d /tmp/tools ]]; then
+  mv /tmp/tools .
+fi
 
 ## Checkout NuttX Repo and NuttX Apps
 git clone https://github.com/apache/nuttx

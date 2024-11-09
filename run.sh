@@ -13,6 +13,3 @@ set -x  #  Echo commands
 
 ## Run All NuttX CI Jobs on macOS
 ./run-ci-macos.sh
-
-## echo utc_time=$(date -u +'%Y-%m-%dT%H:%M:%S')
-## echo local_time=$(date +'%Y-%m-%dT%H:%M:%S')
