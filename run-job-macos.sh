@@ -38,6 +38,9 @@ if [[ -d /tmp/tools ]]; then
   mv /tmp/tools .
 fi
 
+## Somehow wasi-sdk always fails. We re-download.
+rm -rf $tmp_dir/tools/wasi-sdk*
+
 ## Checkout NuttX Repo and NuttX Apps
 git clone https://github.com/apache/nuttx
 git clone https://github.com/apache/nuttx-apps apps
@@ -45,36 +48,38 @@ pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/$(git rev-
 pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/$(git rev-parse HEAD) ; popd
 
 ## Patch the macOS CI Job for Apple Silicon: darwin.sh
+## Which will trigger an "uncommitted files" warning later
 pushd nuttx
 $script_dir/patch-ci-macos.sh
 git status
 popd
 
-## Suppress darwin.sh warning: We rename "nuttx/tools/ci" as "nuttx/tools/__pycache__"
-## Why __pycache__? Because it's skipped by "nuttx/tools/.gitignore"
+## Suppress the uncommitted darwin.sh warning:
+## We copy the patched "nuttx" folder to "nuttx-patched"
+## Then restore the original "nuttx" folder
+cp -r nuttx nuttx-patched
 pushd nuttx
-mv tools/ci tools/__pycache__
 git restore tools/ci
 git status
 popd
 
-## Patch CI Job cibuild.sh to point to __pycache__
+## Patch the CI Job cibuild.sh to point to "nuttx-patched"
 ## Change: CIPLAT=${CIWORKSPACE}/nuttx/tools/ci/platforms
-## To:     CIPLAT=${CIWORKSPACE}/nuttx/tools/__pycache__/platforms
-file=nuttx/tools/__pycache__/cibuild.sh
+## To:     CIPLAT=${CIWORKSPACE}/nuttx-patched/tools/ci/platforms
+file=nuttx-patched/tools/ci/cibuild.sh
 tmp_file=$tmp_dir/cibuild.sh
-search='\/ci\/'
-replace='\/__pycache__\/'
+search='\/nuttx\/tools\/'
+replace='\/nuttx-patched\/tools\/'
 cat $file \
   | sed "s/$search/$replace/g" \
   >$tmp_file
 mv $tmp_file $file
 chmod +x $file
 
-## Run the CI Job in __pycache__
+## Run the CI Job in "nuttx-patched"
 ## ./cibuild.sh -i -c -A -R testlist/macos.dat
 ## ./cibuild.sh -i -c -A -R testlist/arm-01.dat
-pushd nuttx/tools/__pycache__
+pushd nuttx-patched/tools/ci
 (
   ./cibuild.sh -i -c -A -R testlist/$job.dat \
     || echo '***** BUILD FAILED'
