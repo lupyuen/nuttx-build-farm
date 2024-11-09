@@ -10,6 +10,9 @@ For Ubuntu Build Farm:
 For macOS Build Farm:
 
 ```bash
+## Install the tools
+brew install gh neofetch
+
 ## Download the source files
 git clone https://github.com/lupyuen/nuttx-build-farm
 cd nuttx-build-farm
