@@ -74,13 +74,14 @@ function upload_log {
 
 ## Repeat forever for All CI Jobs, excluding:
 ## arm-05: "nrf5340-dk/rpmsghci_nimble_cpuapp: apps/wireless/bluetooth/nimble/mynewt-nimble/nimble/host/services/gatt/src/ble_svc_gatt.c:174:9: error: variable 'rc' set but not used"
+## arm-07: "ucans32k146/se05x: mv: illegal option -- T"
 ## xtensa-02: "xtensa-esp32s2-elf-gcc: Command not found"
 ## arm64-01: "imx93-evk/bootloader: ld: library not found for -lcrt0.o"
 ## sim-01, 02, 03: "clang: error: invalid argument 'medium' to -mcmodel="
 ## other: "micropendous3/hello: make: avr-objcopy: Bad CPU type in executable"
 for (( ; ; )); do
   for job in \
-    arm-07 arm-08 arm-09 arm-10 arm-11 arm-12 arm-13 \
+    arm-08 arm-09 arm-10 arm-11 arm-12 arm-13 \
     arm-01 arm-02 arm-03 arm-04 \
     arm-06 arm-14 \
     risc-v-01 risc-v-02 risc-v-03 \
