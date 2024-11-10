@@ -72,12 +72,13 @@ function upload_log {
     --filename "ci-$job.log"
 }
 
-## Repeat forever for All CI Jobs, excluding
+## Repeat forever for All CI Jobs, excluding:
 ## xtensa-02: "xtensa-esp32s2-elf-gcc: Command not found"
+## arm64-01: "imx93-evk/bootloader: ld: library not found for -lcrt0.o"
+## sim-01, 02, 03: "clang: error: invalid argument 'medium' to -mcmodel="
 for (( ; ; )); do
   for job in \
-    arm64-01 x86_64-01 \
-    sim-01 sim-02 sim-03 \
+    x86_64-01 \
     other \
     arm-01 arm-02 arm-03 arm-04 \
     arm-05 arm-06 arm-07 arm-08 \
