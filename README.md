@@ -2,8 +2,11 @@
 
 # Ubuntu and macOS Build Farm for Apache NuttX RTOS
 
-Read the article...
+Read the articles...
+
 - ["Your very own Build Farm for Apache NuttX RTOS"](https://lupyuen.codeberg.page/articles/ci2.html)
+
+- ["Optimising the Continuous Integration for Apache NuttX RTOS"](https://lupyuen.codeberg.page/articles/ci3.html)
 
 __Highly Esteemed Members of our NuttX Build Farm:__
 
