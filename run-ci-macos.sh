@@ -72,19 +72,20 @@ function upload_log {
     --filename "ci-$job.log"
 }
 
-## Repeat forever for All CI Jobs
+## Repeat forever for All CI Jobs, excluding
+## xtensa-02: "xtensa-esp32s2-elf-gcc: Command not found"
 for (( ; ; )); do
   for job in \
+    arm64-01 x86_64-01 \
+    sim-01 sim-02 sim-03 \
+    other \
     arm-01 arm-02 arm-03 arm-04 \
     arm-05 arm-06 arm-07 arm-08 \
     arm-09 arm-10 arm-11 arm-12 \
     arm-13 arm-14 \
     risc-v-01 risc-v-02 risc-v-03 \
     risc-v-04 risc-v-05 risc-v-06 \
-    xtensa-01 xtensa-02 \
-    arm64-01 x86_64-01 \
-    sim-01 sim-02 sim-03 \
-    other
+    xtensa-01
   do
     ## Run the CI Job and find errors / warnings
     run_job $job

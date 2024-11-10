@@ -76,6 +76,17 @@ cat $file \
 mv $tmp_file $file
 chmod +x $file
 
+## Exclude clang Targets from macOS Build, because they will fail due to unknown arch
+## "/arm/lpc54xx,CONFIG_ARM_TOOLCHAIN_CLANG"
+## https://github.com/apache/nuttx/pull/14691#issuecomment-2466518544
+tmp_file=$tmp_dir/rewrite-testlist.dat
+for file in nuttx-patched/tools/ci/testlist/*.dat; do
+  grep -v "CLANG" \
+    $file \
+    >$tmp_file
+  mv $tmp_file $file
+done
+
 ## Run the CI Job in "nuttx-patched"
 ## ./cibuild.sh -i -c -A -R testlist/macos.dat
 ## ./cibuild.sh -i -c -A -R testlist/arm-01.dat
