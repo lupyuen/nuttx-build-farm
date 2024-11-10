@@ -8,6 +8,8 @@ Read the articles...
 
 - ["Optimising the Continuous Integration for Apache NuttX RTOS"](https://lupyuen.codeberg.page/articles/ci3.html)
 
+- ["darwin.sh: Port NuttX CI Job to macOS-14"](https://github.com/apache/nuttx/pull/14691)
+
 __Highly Esteemed Members of our NuttX Build Farm:__
 
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
