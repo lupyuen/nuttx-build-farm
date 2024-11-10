@@ -79,15 +79,21 @@ function upload_log {
 ## arm64-01: "imx93-evk/bootloader: ld: library not found for -lcrt0.o"
 ## sim-01, 02, 03: "clang: error: invalid argument 'medium' to -mcmodel="
 ## other: "micropendous3/hello: make: avr-objcopy: Bad CPU type in executable"
+## Arm32 Jobs run hotter (80 deg C) than RISC-V Jobs (70 deg C). So we stagger the jobs.
 for (( ; ; )); do
   for job in \
-    arm-01 arm-02 arm-03 arm-04 \
-    arm-06 arm-08 arm-09 arm-10 \
-    arm-11 arm-12 arm-13 arm-14 \
-    risc-v-01 risc-v-02 risc-v-03 \
-    risc-v-04 risc-v-05 risc-v-06 \
-    xtensa-01 \
-    x86_64-01
+    arm-01 risc-v-01 \
+    arm-02 risc-v-02 \
+    arm-03 risc-v-03 \
+    arm-04 risc-v-04 \
+    arm-06 risc-v-05 \
+    arm-08 risc-v-06 \
+    arm-09 xtensa-01 \
+    arm-10 x86_64-01 \
+    arm-11 \
+    arm-12 \
+    arm-13 \
+    arm-14
   do
     ## Run the CI Job and find errors / warnings
     run_job $job
