@@ -13,6 +13,10 @@ set -x  #  Echo commands
 
 # Parameter is CI Job, like "arm-01"
 job=$1
+if [[ "$job" == "" ]]; then
+  echo "ERROR: Job Parameter is missing (e.g. arm-01)"
+  exit 1
+fi
 
 ## Show the System Info
 neofetch
@@ -21,6 +25,20 @@ uname -a
 ## Get the Script Directory
 script_path="${BASH_SOURCE}"
 script_dir="$(cd -P "$(dirname -- "${script_path}")" >/dev/null 2>&1 && pwd)"
+
+## Remove Homebrew ar from PATH. It shall become /usr/bin/ar
+export PATH=$(
+  echo $PATH \
+    | tr ':' '\n' \
+    | grep -v "/opt/homebrew/opt/make/libexec/gnubin" \
+    | grep -v "/opt/homebrew/opt/coreutils/libexec/gnubin" \
+    | grep -v "/opt/homebrew/opt/binutils/bin" \
+    | tr '\n' ':'
+)
+if [[ $(which ar) != "/usr/bin/ar" ]]; then
+  echo "ERROR: Expected 'which ar' to return /usr/bin/ar, not $(which ar)"
+  exit 1
+fi
 
 ## Preserve the Tools Folder
 tmp_dir=/tmp/run-job-macos
@@ -47,14 +65,14 @@ git clone https://github.com/apache/nuttx-apps apps
 pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/$(git rev-parse HEAD) ; popd
 pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/$(git rev-parse HEAD) ; popd
 
-## Patch the macOS CI Job for Apple Silicon: darwin.sh
+## Patch the macOS CI Job for Apple Silicon: darwin_arm64.sh
 ## Which will trigger an "uncommitted files" warning later
 pushd nuttx
 $script_dir/patch-ci-macos.sh
 git status
 popd
 
-## Suppress the uncommitted darwin.sh warning:
+## Suppress the uncommitted darwin_arm64.sh warning:
 ## We copy the patched "nuttx" folder to "nuttx-patched"
 ## Then restore the original "nuttx" folder
 cp -r nuttx nuttx-patched
