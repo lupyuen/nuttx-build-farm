@@ -53,7 +53,8 @@ __To Join macOS Build Farm:__
 Please tell me your Gist ID:
 
 ```bash
-## Install the tools
+## TODO: Install Xcode Command Line Tools, brew, autoconf, wget
+## Then install these tools
 brew install gh neofetch
 
 ## Download the scripts
