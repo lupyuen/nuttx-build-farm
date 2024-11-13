@@ -80,6 +80,8 @@ cd nuttx-build-farm
 ## rm -rf /tmp/run-job-macos
 ```
 
+[(See the Install Log)](https://gist.github.com/lupyuen/0603bbf9c6c6102c0446415602200f87)
+
 [(See the Build Logs)](https://gist.github.com/nuttxmacos)
 
 __Warning:__ This will max out all 12 CPU Cores of Mac Mini M2 Pro. Running at a boiling hot 100 deg C!
