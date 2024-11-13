@@ -108,6 +108,9 @@ for (( ; ; )); do
     upload_log $job $nuttx_hash $apps_hash
     sleep 10
   done
+
+  ## Re-download the toolchain, in case the files got messed up
+  rm -rf /tmp/run-job-macos
 done
 
 ## Here's how we delete the 20 latest gists
