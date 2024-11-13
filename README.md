@@ -78,3 +78,9 @@ cd nuttx-build-farm
 ## To re-download the toolchain:
 ## rm -rf /tmp/run-job-macos
 ```
+
+[(See the Build Logs)](https://gist.github.com/nuttxmacos)
+
+__Warning:__ This will max out all 12 CPU Cores of Mac Mini M2 Pro. Running at a boiling hot 100 deg C!
+
+![This will max out all 12 CPU Cores of Mac Mini M2 Pro. Running at a boiling hot 100 deg C!](https://lupyuen.github.io/images/ci5-arm32.png)
