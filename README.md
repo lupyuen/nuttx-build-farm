@@ -76,7 +76,7 @@ cd nuttx-build-farm
 ## Start the macOS Build Task
 ./run-ci-macos.sh
 
-## To re-download the toolchain:
+## To re-download the toolchain, if the files get messed up:
 ## rm -rf /tmp/run-job-macos
 ```
 
