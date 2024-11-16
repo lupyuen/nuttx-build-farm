@@ -100,8 +100,16 @@ for (( ; ; )); do
     find_messages
 
     ## Get the hashes for NuttX and Apps
-    nuttx_hash=$(grep --only-matching -E "nuttx/tree/[0-9a-z]+" $log_file | grep --only-matching -E "[0-9a-z]+$")
-    apps_hash=$(grep --only-matching -E "nuttx-apps/tree/[0-9a-z]+" $log_file | grep --only-matching -E "[0-9a-z]+$")
+    nuttx_hash=$(
+      cat $log_file \
+      | grep --only-matching -E 'nuttx/tree/[0-9a-z]+' \
+      | grep --only-matching -E '[0-9a-z]+$' --max-count=1
+    )
+    apps_hash=$(
+      cat $log_file \
+      | grep --only-matching -E 'nuttx-apps/tree/[0-9a-z]+' \
+      | grep --only-matching -E '[0-9a-z]+$' --max-count=1
+    )
 
     ## Upload the log
     upload_log $job $nuttx_hash $apps_hash
