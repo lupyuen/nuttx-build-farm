@@ -129,6 +129,9 @@ done
 #   >$tmp_file
 # mv $tmp_file $file
 
+## If CI Test Hangs: Kill it after 1 hour
+( sleep 3600 ; echo Killing pytest... ; pkill -f pytest )&
+
 ## Run the CI Job in "nuttx-patched"
 ## ./cibuild.sh -i -c -A -R testlist/macos.dat
 ## ./cibuild.sh -i -c -A -R testlist/arm-01.dat
