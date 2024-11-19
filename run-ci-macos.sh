@@ -73,6 +73,10 @@ function upload_log {
     --filename "ci-$job.log"
 }
 
+## Skip to a Random CI Job. Assume max 32 CI Jobs.
+let "skip = $RANDOM % 32"
+echo Skipping $skip CI Jobs...
+
 ## Repeat forever for All CI Jobs, excluding:
 ## arm-05: "nrf5340-dk/rpmsghci_nimble_cpuapp: apps/wireless/bluetooth/nimble/mynewt-nimble/nimble/host/services/gatt/src/ble_svc_gatt.c:174:9: error: variable 'rc' set but not used"
 ## arm-07: "ucans32k146/se05x: mv: illegal option -- T"
@@ -94,6 +98,12 @@ for (( ; ; )); do
     arm-04 risc-v-04 \
     arm-06 risc-v-05
   do
+    ## Skip to a Random CI Job
+    if [[ $skip -gt 0 ]]; then
+      let skip--
+      continue
+    fi
+
     ## Run the CI Job and find errors / warnings
     run_job $job
     clean_log
