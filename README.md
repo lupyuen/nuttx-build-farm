@@ -17,6 +17,7 @@ __Highly Esteemed Members of our NuttX Build Farm:__
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
 1.  [__lvanasse__](https://gist.github.com/lvanasse) (Ubuntu)
 1.  [__nuttxpr__](https://gist.github.com/nuttxpr) (Ubuntu)
+1.  [__nuttxpr__](https://gist.github.com/nuttxlinux) (Ubuntu)
 1.  [__nuttxmacos__](https://gist.github.com/nuttxmacos) (macOS)
 
 __To Join Ubuntu Build Farm:__
@@ -49,6 +50,17 @@ sudo ./run-ci.sh
 ```
 
 (GitHub Token should also work, see below)
+
+To keep the Build Farm running after logout: Use `tmux`...
+
+```bash
+## First Time: Run tmux and start `sudo ./run-ci.sh`
+sudo apt install tmux
+tmux
+
+## Next Time: Attach to the previous tmux session
+tmux a
+```
 
 __To Join macOS Build Farm:__
 
