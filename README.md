@@ -62,6 +62,8 @@ tmux
 tmux a
 ```
 
+For a super-duper Server-Class Xeon PC: Run multiple jobs `run-ci.sh`, `run-ci2.sh`, `run-ci3.sh`, `run-ci4.sh`
+
 __To Join macOS Build Farm:__
 
 Please tell me your Gist ID:
