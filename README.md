@@ -17,7 +17,7 @@ __Highly Esteemed Members of our NuttX Build Farm:__
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
 1.  [__lvanasse__](https://gist.github.com/lvanasse) (Ubuntu)
 1.  [__nuttxpr__](https://gist.github.com/nuttxpr) (Ubuntu)
-1.  [__nuttxlinux__](https://gist.github.com/nuttxlinux) (Ubuntu)
+1.  [__nuttxlinux__](https://gist.github.com/nuttxlinux) (Ubuntu Xeon)
 1.  [__nuttxmacos__](https://gist.github.com/nuttxmacos) (macOS)
 
 __To Join Ubuntu Build Farm:__
