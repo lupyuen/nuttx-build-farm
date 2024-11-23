@@ -123,7 +123,7 @@ for (( ; ; )); do
 
     ## Upload the log
     upload_log $job $nuttx_hash $apps_hash
-    sleep 10
+    date ; sleep 20
   done
 
   ## Re-download the toolchain, in case the files got messed up
