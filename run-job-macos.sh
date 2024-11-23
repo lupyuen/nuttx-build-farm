@@ -19,6 +19,7 @@ if [[ "$job" == "" ]]; then
 fi
 
 ## Show the System Info
+set | grep TMUX
 neofetch
 uname -a
 
