@@ -30,19 +30,38 @@ else
   script_option=
 fi
 
-## Create the Temp Folder
-tmp_dir=/tmp/rewind-build/$target
-# rm -rf $tmp_dir
-mkdir -p $tmp_dir
-cd $tmp_dir
+## Build the NuttX Commit for the Target
+function build_commit {
+  local log=$1
+  local timestamp=$2
+  local apps_hash=$3
+  local nuttx_hash=$4
+  local prev_hash=$5
+  local next_hash=$6
+
+  ## Run the Build Job and find errors / warnings
+  run_job \
+    $log \
+    $timestamp \
+    $apps_hash \
+    $nuttx_hash \
+    $next_hash \
+    $prev_hash
+  clean_log $log
+  find_messages $log
+
+  ## Upload the log
+  ## TODO: upload_log $log $job $nuttx_hash $apps_hash
+}
 
 ## Run the job
 function run_job {
-  local timestamp=$1
-  local apps_hash=$2
-  local nuttx_hash=$3
-  local prev_hash=$4
-  local next_hash=$5
+  local log_file=$1
+  local timestamp=$2
+  local apps_hash=$3
+  local nuttx_hash=$4
+  local prev_hash=$5
+  local next_hash=$6
   pushd /tmp
   script $log_file \
     $script_option \
@@ -58,30 +77,9 @@ function run_job {
   popd
 }
 
-## Build the NuttX Commit for the Target
-function build_commit {
-  local timestamp=$1
-  local apps_hash=$2
-  local nuttx_hash=$3
-  local prev_hash=$4
-  local next_hash=$5
-
-  ## Run the Build Job and find errors / warnings
-  run_job \
-    $timestamp \
-    $apps_hash \
-    $nuttx_hash \
-    $next_hash \
-    $prev_hash
-  clean_log
-  find_messages
-
-  ## Upload the log
-  # upload_log $job $nuttx_hash $apps_hash
-}
-
 ## Strip the control chars
 function clean_log {
+  local log_file=$1
   local tmp_file=$log_file.tmp
   cat $log_file \
     | tr -d '\r' \
@@ -100,6 +98,7 @@ function clean_log {
 
 ## Search for Errors and Warnings
 function find_messages {
+  local log_file=$1
   local tmp_file=$log_file.tmp
   local msg_file=$log_file.msg
   local pattern='^(.*):(\d+):(\d+):\s+(warning|fatal error|error):\s+(.*)$'
@@ -114,9 +113,10 @@ function find_messages {
 
 ## Upload to GitHub Gist
 function upload_log {
-  local job=$1
-  local nuttx_hash=$2
-  local apps_hash=$3
+  local log_file=$1
+  local job=$2
+  local nuttx_hash=$3
+  local apps_hash=$4
   cat $log_file | \
     gh gist create \
     --public \
@@ -124,14 +124,20 @@ function upload_log {
     --filename "ci-$job.log"
 }
 
+## Create the Temp Folder
+tmp_dir=/tmp/rewind-build/$target
+rm -rf $tmp_dir
+mkdir -p $tmp_dir
+cd $tmp_dir
+
 ## Get the Latest NuttX Apps Commit
-# git clone https://github.com/apache/nuttx-apps apps
+git clone https://github.com/apache/nuttx-apps apps
 pushd apps
 apps_hash=$(git rev-parse HEAD)
 popd
 
 ## Build the Latest 20 Commits
-# git clone https://github.com/apache/nuttx
+git clone https://github.com/apache/nuttx
 cd nuttx
 for commit in $(
   TZ=UTC0 \
@@ -150,9 +156,9 @@ for commit in $(
     nuttx_hash=$next_hash
   fi; 
 
-  echo Building Commit $nuttx_hash
-  log_file=$tmp_dir/$nuttx_hash
+  echo Building Commit $nuttx_hash  
   build_commit \
+    $tmp_dir/$nuttx_hash \
     $timestamp \
     $apps_hash \
     $nuttx_hash \
