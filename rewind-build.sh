@@ -68,8 +68,9 @@ for commit in $(
   --date='format-local:%Y-%m-%dT%H:%M:%S' \
   --format="%cd,%H"
 ); do
-  timestamp=$(echo $commit | cut -d ',' -f 1)
-  nuttx_hash=$(echo $commit | cut -d ',' -f 2)
+  ## Commit looks like 2024-11-24T09:52:42,9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
+  timestamp=$(echo $commit | cut -d ',' -f 1)  ## 2024-11-24T09:52:42
+  nuttx_hash=$(echo $commit | cut -d ',' -f 2)  ## 9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
 
   echo Building Commit $nuttx_hash
   log_file=$tmp_dir/$nuttx_hash
