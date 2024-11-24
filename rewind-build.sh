@@ -164,11 +164,10 @@ for commit in $(
     $apps_hash \
     $nuttx_hash \
     $next_hash \
-    $prev_hash \
-    &
+    $prev_hash
 
   ## Throttle our downloads from GitHub
-  date ; sleep $(( 60 * 5 ))
+  ## TODO: date ; sleep $(( 60 * 5 ))
 
   ## Shift the Commits
   prev_hash=$nuttx_hash
