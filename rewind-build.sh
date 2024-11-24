@@ -16,8 +16,6 @@ if [[ "$target" == "" ]]; then
   echo "ERROR: Target Parameter is missing (e.g. ox64:nsh)"
   exit 1
 fi
-tmp_dir=/tmp/rewind-build/$target
-####log_file=/tmp/release-$device.log
 
 ## Get the Script Directory
 script_path="${BASH_SOURCE}"
@@ -29,3 +27,43 @@ if [ "`uname`" == "Linux" ]; then
 else
   script_option=
 fi
+
+## Create the Temp Folder
+tmp_dir=/tmp/rewind-build/$target
+rm -rf $tmp_dir
+mkdir -p $tmp_dir
+cd $tmp_dir
+
+## Find the Latest 20 Commits
+git clone https://github.com/apache/nuttx
+cd nuttx
+for commit in $(git log -20 --pretty=format:"%H")
+do
+  echo Testing Commit $commit
+  git reset --hard $commit
+  sleep 5
+  test_once $commit
+done
+
+## Run the CI Job and find errors / warnings
+run_job $job
+clean_log
+find_messages
+
+## Get the hashes for NuttX and Apps
+nuttx_hash=$(
+  cat $log_file \
+  | grep --only-matching -E "nuttx/tree/[0-9a-z]+" \
+  | grep --only-matching -E "[0-9a-z]+$" --max-count=1
+)
+apps_hash=$(
+  cat $log_file \
+  | grep --only-matching -E "nuttx-apps/tree/[0-9a-z]+" \
+  | grep --only-matching -E "[0-9a-z]+$" --max-count=1
+)
+
+## Upload the log
+upload_log $job $nuttx_hash $apps_hash
+
+## Free up the Docker disk space
+sudo docker system prune --force
