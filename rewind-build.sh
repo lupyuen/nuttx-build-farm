@@ -113,11 +113,16 @@ for commit in $(
     $apps_hash \
     $nuttx_hash \
     $next_hash \
-    $prev_hash
+    $prev_hash \
+    &
+  sleep 10
 
   prev_hash=$nuttx_hash
   nuttx_hash=$next_hash
 done
+
+## Wait for Background Tasks to complete
+fg
 
 ## Free up the Docker disk space
 sudo docker system prune --force
