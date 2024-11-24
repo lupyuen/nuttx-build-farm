@@ -6,9 +6,9 @@ Read the articles...
 
 - ["Your very own Build Farm for Apache NuttX RTOS"](https://lupyuen.codeberg.page/articles/ci2.html)
 
-- ["Optimising the Continuous Integration for Apache NuttX RTOS"](https://lupyuen.codeberg.page/articles/ci3.html)
+- ["Optimising the Continuous Integration for Apache NuttX RTOS (GitHub Actions)"](https://lupyuen.codeberg.page/articles/ci3.html)
 
-- ["Continuous Integration Dashboard for Apache NuttX RTOS"](https://lupyuen.github.io/articles/ci4)
+- ["Continuous Integration Dashboard for Apache NuttX RTOS (Prometheus and Grafana)"](https://lupyuen.github.io/articles/ci4)
 
 - ["darwin.sh: Port NuttX CI Job to macOS-14"](https://github.com/apache/nuttx/pull/14691)
 
