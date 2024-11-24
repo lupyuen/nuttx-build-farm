@@ -3,7 +3,7 @@
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Commit
 ## If it fails: Rebuild with Previous Commit and Next Commit
-## sudo ./rewind-commit.sh ox64:nsh d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
+## sudo ./rewind-commit.sh ox64:nsh 2024-11-24T00:00:00 d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-commit.sh
 echo Called by https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh
@@ -18,29 +18,36 @@ if [[ "$target" == "" ]]; then
   exit 1
 fi
 
-## Second Parameter is the Commit Hash of NuttX Apps Repo, like "d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288"
-apps_hash=$2
+## Second Parameter is the Timestamp of the NuttX Repo, like "2024-11-24T00:00:00"
+timestamp=$2
+if [[ "$timestamp" == "" ]]; then
+  echo "ERROR: Timestamp is missing (e.g. ox64:nsh)"
+  exit 1
+fi
+
+## Third Parameter is the Commit Hash of NuttX Apps Repo, like "d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288"
+apps_hash=$3
 if [[ "$apps_hash" == "" ]]; then
   echo "ERROR: NuttX Apps Hash is missing (e.g. d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288)"
   exit 1
 fi
 
-## Third Parameter is the Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
-nuttx_hash=$3
+## Fourth Parameter is the Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
+nuttx_hash=$4
 if [[ "$nuttx_hash" == "" ]]; then
   echo "ERROR: NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
   exit 1
 fi
 
-## Fourth Parameter is the Previous Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
-prev_hash=$4
+## Fifth Parameter is the Previous Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
+prev_hash=$5
 if [[ "$prev_hash" == "" ]]; then
   echo "ERROR: Previous NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
   exit 1
 fi
 
-## Fifth Parameter is the Next Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
-next_hash=$5
+## Sixth Parameter is the Next Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
+next_hash=$6
 if [[ "$next_hash" == "" ]]; then
   echo "ERROR: Next NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
   exit 1
