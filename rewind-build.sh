@@ -6,6 +6,7 @@
 ## Build the Target for the Latest Commit
 ## If it fails: Rebuild with Previous Commit and Next Commit
 ## Repeat with Previous 20 Commits
+## Upload Every Build Log to GitHub Gist
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh
 
