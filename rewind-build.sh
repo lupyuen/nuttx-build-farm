@@ -73,11 +73,55 @@ function build_commit {
     $nuttx_hash \
     $next_hash \
     $prev_hash
-  # clean_log
-  # find_messages
+  clean_log
+  find_messages
 
   ## Upload the log
   # upload_log $job $nuttx_hash $apps_hash
+}
+
+## Strip the control chars
+function clean_log {
+  local tmp_file=$log_file.tmp
+  cat $log_file \
+    | tr -d '\r' \
+    | tr -d '\r' \
+    | sed 's/\x08/ /g' \
+    | sed 's/\x1B(B//g' \
+    | sed 's/\x1B\[K//g' \
+    | sed 's/\x1B[<=>]//g' \
+    | sed 's/\x1B\[[0-9:;<=>?]*[!]*[A-Za-z]//g' \
+    | sed 's/\x1B[@A-Z\\\]^_]\|\x1B\[[0-9:;<=>?]*[-!"#$%&'"'"'()*+,.\/]*[][\\@A-Z^_`a-z{|}~]//g' \
+    | cat -v \
+    >$tmp_file
+  mv $tmp_file $log_file
+  echo ----- "Done! $log_file"
+}
+
+## Search for Errors and Warnings
+function find_messages {
+  local tmp_file=$log_file.tmp
+  local msg_file=$log_file.msg
+  local pattern='^(.*):(\d+):(\d+):\s+(warning|fatal error|error):\s+(.*)$'
+  grep '^\*\*\*\*\*' $log_file \
+    > $msg_file
+  grep -P "$pattern" $log_file \
+    | uniq \
+    >> $msg_file
+  cat $msg_file $log_file >$tmp_file
+  mv $tmp_file $log_file
+}
+
+## Upload to GitHub Gist
+function upload_log {
+  local job=$1
+  local nuttx_hash=$2
+  local apps_hash=$3
+  cat $log_file | \
+    gh gist create \
+    --public \
+    --desc "[$job] CI Log for nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash" \
+    --filename "ci-$job.log"
 }
 
 ## Get the Latest NuttX Apps Commit
@@ -115,14 +159,14 @@ for commit in $(
     $next_hash \
     $prev_hash \
     &
-  sleep 10
+  sleep 30
 
   prev_hash=$nuttx_hash
   nuttx_hash=$next_hash
 done
 
 ## Wait for Background Tasks to complete
-fg
+fg || true
 
 ## Free up the Docker disk space
 sudo docker system prune --force
