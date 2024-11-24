@@ -159,8 +159,11 @@ for commit in $(
     $next_hash \
     $prev_hash \
     &
-  sleep 30
 
+  ## Throttle our downloads from GitHub
+  date ; sleep $(( 60 * 5 ))
+
+  ## Shift the Commits
   prev_hash=$nuttx_hash
   nuttx_hash=$next_hash
 done
