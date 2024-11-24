@@ -106,30 +106,6 @@ for file in nuttx-patched/tools/ci/testlist/*.dat; do
   mv $tmp_file $file
 done
 
-## test_example.py: Reduce the timeout to 1 second
-## Change: p.sendCommand("pipe", "redirect_reader: Returning success", timeout=60)
-## To:     p.sendCommand("pipe", "redirect_reader: Returning success", timeout=1)
-# file=nuttx-patched/tools/ci/testrun/script/test_example/test_example.py
-# tmp_file=$tmp_dir/test_example.py
-# search='timeout=[0-9]*'
-# replace='timeout=1'
-# cat $file \
-#   | sed "s/$search/$replace/g" \
-#   >$tmp_file
-# mv $tmp_file $file
-
-## test_openposix_.py: Reduce the timeout to 1 second
-## Change: p.sendCommand( \n "ltp_interfaces_mq_send_4_2", ["PASSED", "passed", "Passed", "PASS"], timeout=10 \n )
-## To:     p.sendCommand( \n "ltp_interfaces_mq_send_4_2", ["PASSED", "passed", "Passed", "PASS"], timeout=1 \n )
-# file=nuttx-patched/tools/ci/testrun/script/test_open_posix/test_openposix_.py
-# tmp_file=$tmp_dir/test_openposix_.py
-# search='timeout=[0-9]*'
-# replace='timeout=1'
-# cat $file \
-#   | sed "s/$search/$replace/g" \
-#   >$tmp_file
-# mv $tmp_file $file
-
 ## If CI Test Hangs: Kill it after 1 hour
 ( sleep 3600 ; echo Killing pytest after timeout... ; pkill -f pytest )&
 
