@@ -104,10 +104,10 @@ function find_messages {
   local msg_file=$log_file.msg
   local pattern='^(.*):(\d+):(\d+):\s+(warning|fatal error|error):\s+(.*)$'
   grep '^\*\*\*\*\*' $log_file \
-    > $msg_file
+    > $msg_file || true
   grep -P "$pattern" $log_file \
     | uniq \
-    >> $msg_file
+    >> $msg_file || true
   cat $msg_file $log_file >$tmp_file
   mv $tmp_file $log_file
 }
