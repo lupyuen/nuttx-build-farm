@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for a bunch of Commits.
+## sudo ./rewind-build.sh ox64:nsh
+
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Latest Commit
 ## If it fails: Rebuild with Previous Commit and Next Commit
@@ -34,36 +36,33 @@ rm -rf $tmp_dir
 mkdir -p $tmp_dir
 cd $tmp_dir
 
-## Find the Latest 20 Commits
+function build_commit {
+  local nuttx_hash=$1
+  local apps_hash=$1
+
+  ## Run the CI Job and find errors / warnings
+  run_job $job
+  clean_log
+  find_messages
+
+  ## Upload the log
+  upload_log $job $nuttx_hash $apps_hash
+}
+
+## Build the Latest 20 Commits
 git clone https://github.com/apache/nuttx
 cd nuttx
-for commit in $(git log -20 --pretty=format:"%H")
-do
-  echo Testing Commit $commit
-  git reset --hard $commit
-  sleep 5
-  test_once $commit
+for commit in $(
+  TZ=UTC0 \
+  git log \
+  -20 \
+  --date='format-local:%Y-%m-%dT%H:%M:%S' \
+  --format="%cd %H"
+); do
+  echo Building Commit $commit
+  log_file=$tmp_dir/$commit
+  build_commit $nuttx_hash $apps_hash
 done
-
-## Run the CI Job and find errors / warnings
-run_job $job
-clean_log
-find_messages
-
-## Get the hashes for NuttX and Apps
-nuttx_hash=$(
-  cat $log_file \
-  | grep --only-matching -E "nuttx/tree/[0-9a-z]+" \
-  | grep --only-matching -E "[0-9a-z]+$" --max-count=1
-)
-apps_hash=$(
-  cat $log_file \
-  | grep --only-matching -E "nuttx-apps/tree/[0-9a-z]+" \
-  | grep --only-matching -E "[0-9a-z]+$" --max-count=1
-)
-
-## Upload the log
-upload_log $job $nuttx_hash $apps_hash
 
 ## Free up the Docker disk space
 sudo docker system prune --force

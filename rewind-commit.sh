@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for One Single Commit.
+## sudo ./rewind-commit.sh ox64:nsh 2024-11-24T00:00:00 d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
+
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Commit
 ## If it fails: Rebuild with Previous Commit and Next Commit
-## sudo ./rewind-commit.sh ox64:nsh 2024-11-24T00:00:00 d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-commit.sh
 echo Called by https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh
