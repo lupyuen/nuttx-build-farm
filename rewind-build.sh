@@ -54,7 +54,7 @@ function build_commit {
   ## TODO: upload_log $log $job $nuttx_hash $apps_hash
 }
 
-## Run the job
+## Run the Build Job
 function run_job {
   local log_file=$1
   local timestamp=$2
