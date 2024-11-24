@@ -3,6 +3,7 @@
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Commit
 ## If it fails: Rebuild with Previous Commit and Next Commit
+## sudo ./rewind-commit.sh ox64:nsh d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-commit.sh
 echo Called by https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh
@@ -27,44 +28,31 @@ fi
 ## Third Parameter is the Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
 nuttx_hash=$3
 if [[ "$nuttx_hash" == "" ]]; then
-  echo "ERROR: NuttX Commit Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
+  echo "ERROR: NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
   exit 1
 fi
 
 ## Fourth Parameter is the Previous Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
 prev_hash=$4
 if [[ "$prev_hash" == "" ]]; then
-  echo "ERROR: Previous NuttX Commit Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
+  echo "ERROR: Previous NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
   exit 1
 fi
 
 ## Fifth Parameter is the Next Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
 next_hash=$5
 if [[ "$next_hash" == "" ]]; then
-  echo "ERROR: Next NuttX Commit Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
+  echo "ERROR: Next NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
   exit 1
-fi
-
-## Get the Script Directory
-script_path="${BASH_SOURCE}"
-script_dir="$(cd -P "$(dirname -- "${script_path}")" >/dev/null 2>&1 && pwd)"
-
-## Get the `script` option
-if [ "`uname`" == "Linux" ]; then
-  script_option=-c
-else
-  script_option=
 fi
 
 ## Show the System Info
 set | grep TMUX || true
 neofetch
-sleep 10
 
 ## Download the Docker Image
 sudo docker pull \
   ghcr.io/apache/nuttx/apache-nuttx-ci-linux:latest
-sleep 10
 
 ## Build NuttX in Docker Container
 ## If CI Test Hangs: Kill it after 1 hour
@@ -75,6 +63,8 @@ function build_nuttx {
   sudo docker run -it \
     ghcr.io/apache/nuttx/apache-nuttx-ci-linux:latest \
     /bin/bash -c "
+    set -e ;
+    set -x ;
     uname -a ;
     cd ;
     pwd ;
@@ -83,28 +73,44 @@ function build_nuttx {
     echo Building NuttX Commit $nuttx_commit ;
     pushd nuttx ; git reset --hard $nuttx_commit ; popd ;
     echo Building NuttX Apps Commit $apps_commit ;
-    pushd nuttx ; git reset --hard $app_commit ; popd ;
+    pushd apps  ; git reset --hard $apps_commit ; popd ;
     pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/\$(git rev-parse HEAD) ; popd ;
     pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/\$(git rev-parse HEAD) ; popd ;
-    sleep 10 ;
     cd nuttx ;
     ( sleep 3600 ; echo Killing pytest after timeout... ; pkill -f pytest )&
     (
-      (./tools.configure $target && make -j) || (echo '***** BUILD FAILED' ; exit 1)
-    );
+      (./tools/configure.sh $target && make -j) || (res=\$? ; echo '***** BUILD FAILED' ; exit \$res)
+    )
   "
-  local res=$?
+  res=$?
   set -e  ## Exit when any command fails
   echo res=$res
 }
 
 ## Build the Target for the Commit
-res=build_nuttx nuttx_hash apps_hash
+echo "Building This Commit: nuttx=$nuttx_hash, apps=$apps_hash"
+build_nuttx $nuttx_hash $apps_hash
 echo res=$res
 
 ## If it fails: Rebuild with Previous Commit and Next Commit
-# build_nuttx prev_hash apps_hash
-# build_nuttx next_hash apps_hash
+if [[ "$res" != "0" ]]; then
+  echo "***** BUILD FAILED FOR THIS COMMIT"
+  echo "Building Previous Commit: nuttx=$prev_hash, apps=$apps_hash"
+  res=
+  build_nuttx $prev_hash $apps_hash
+  echo res=$res
+  if [[ "$res" != "0" ]]; then
+    echo "***** BUILD FAILED FOR PREVIOUS COMMIT"
+  fi
+
+  echo "Building Next Commit: nuttx=$next_hash, apps=$apps_hash"
+  res=
+  build_nuttx $next_hash $apps_hash
+  echo res=$res
+  if [[ "$res" != "0" ]]; then
+    echo "***** BUILD FAILED FOR NEXT COMMIT"
+  fi
+fi
 
 ## Monitor the Disk Space (in case Docker takes too much)
 df -H
