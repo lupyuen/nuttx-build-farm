@@ -159,7 +159,7 @@ for commit in $(
 
   echo Building Commit $nuttx_hash  
   build_commit \
-    $tmp_dir/$nuttx_hash \
+    $tmp_dir/$nuttx_hash.log \
     $timestamp \
     $apps_hash \
     $nuttx_hash \
