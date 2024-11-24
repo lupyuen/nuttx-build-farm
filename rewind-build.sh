@@ -32,13 +32,16 @@ fi
 
 ## Create the Temp Folder
 tmp_dir=/tmp/rewind-build/$target
-rm -rf $tmp_dir
+# rm -rf $tmp_dir
 mkdir -p $tmp_dir
 cd $tmp_dir
 
 function build_commit {
-  local nuttx_hash=$1
-  local apps_hash=$1
+  local timestamp=$1
+  local apps_hash=$2
+  local nuttx_hash=$3
+  local prev_hash=$4
+  local next_hash=$5
 
   ## Run the CI Job and find errors / warnings
   run_job $job
@@ -49,19 +52,33 @@ function build_commit {
   upload_log $job $nuttx_hash $apps_hash
 }
 
+## Get the Latest NuttX Apps Commit
+# git clone https://github.com/apache/nuttx-apps apps
+pushd apps
+apps_hash=$(git rev-parse HEAD)
+popd
+
 ## Build the Latest 20 Commits
-git clone https://github.com/apache/nuttx
+# git clone https://github.com/apache/nuttx
 cd nuttx
 for commit in $(
   TZ=UTC0 \
   git log \
   -20 \
   --date='format-local:%Y-%m-%dT%H:%M:%S' \
-  --format="%cd %H"
+  --format="%cd,%H"
 ); do
-  echo Building Commit $commit
-  log_file=$tmp_dir/$commit
-  build_commit $nuttx_hash $apps_hash
+  timestamp=$(echo $commit | cut -d ',' -f 1)
+  nuttx_hash=$(echo $commit | cut -d ',' -f 2)
+
+  echo Building Commit $nuttx_hash
+  log_file=$tmp_dir/$nuttx_hash
+  build_commit \
+    $timestamp \
+    $apps_hash \
+    $nuttx_hash \
+    $next_hash \
+    $prev_hash
 done
 
 ## Free up the Docker disk space
