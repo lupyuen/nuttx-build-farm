@@ -36,6 +36,29 @@ tmp_dir=/tmp/rewind-build/$target
 mkdir -p $tmp_dir
 cd $tmp_dir
 
+## Run the job
+function run_job {
+  local timestamp=$1
+  local apps_hash=$2
+  local nuttx_hash=$3
+  local prev_hash=$4
+  local next_hash=$5
+  pushd /tmp
+  script $log_file \
+    $script_option \
+    " \
+      $script_dir/rewind-commit.sh \
+        $target \
+        $timestamp \
+        $apps_hash \
+        $nuttx_hash \
+        $prev_hash \
+        $next_hash \
+    "
+  popd
+}
+
+## Build the NuttX Commit for the Target
 function build_commit {
   local timestamp=$1
   local apps_hash=$2
@@ -43,13 +66,18 @@ function build_commit {
   local prev_hash=$4
   local next_hash=$5
 
-  ## Run the CI Job and find errors / warnings
-  run_job $job
-  clean_log
-  find_messages
+  ## Run the Build Job and find errors / warnings
+  run_job \
+    $timestamp \
+    $apps_hash \
+    $nuttx_hash \
+    $next_hash \
+    $prev_hash
+  # clean_log
+  # find_messages
 
   ## Upload the log
-  upload_log $job $nuttx_hash $apps_hash
+  # upload_log $job $nuttx_hash $apps_hash
 }
 
 ## Get the Latest NuttX Apps Commit
@@ -70,7 +98,13 @@ for commit in $(
 ); do
   ## Commit looks like 2024-11-24T09:52:42,9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
   timestamp=$(echo $commit | cut -d ',' -f 1)  ## 2024-11-24T09:52:42
-  nuttx_hash=$(echo $commit | cut -d ',' -f 2)  ## 9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
+  next_hash=$(echo $commit | cut -d ',' -f 2)  ## 9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
+  if [[ "$prev_hash" == "" ]]; then
+    prev_hash=$next_hash
+  fi; 
+  if [[ "$nuttx_hash" == "" ]]; then
+    nuttx_hash=$next_hash
+  fi; 
 
   echo Building Commit $nuttx_hash
   log_file=$tmp_dir/$nuttx_hash
@@ -80,6 +114,9 @@ for commit in $(
     $nuttx_hash \
     $next_hash \
     $prev_hash
+
+  prev_hash=$nuttx_hash
+  nuttx_hash=$next_hash
 done
 
 ## Free up the Docker disk space
