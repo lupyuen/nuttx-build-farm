@@ -146,7 +146,7 @@ popd
 
 ## Build the Latest 20 Commits
 ## TODO: num_commits=20
-num_commits=1
+num_commits=3
 git clone https://github.com/apache/nuttx
 cd nuttx
 for commit in $(
@@ -189,3 +189,4 @@ fg || true
 
 ## Free up the Docker disk space
 sudo docker system prune --force
+echo "Done!"
