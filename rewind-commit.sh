@@ -78,11 +78,10 @@ function build_nuttx {
     pwd ;
     git clone https://github.com/apache/nuttx ;
     git clone https://github.com/apache/nuttx-apps apps ;
-    echo Building NuttX Commit $nuttx_commit ;
+    echo Building nuttx @ $nuttx_commit / nuttx-apps @ $apps_commit ;
     pushd nuttx ; git reset --hard $nuttx_commit ; popd ;
-    echo Building NuttX Apps Commit $apps_commit ;
-    pushd apps  ; git reset --hard $apps_commit ; popd ;
-    pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/\$(git rev-parse HEAD) ; popd ;
+    pushd apps  ; git reset --hard $apps_commit  ; popd ;
+    pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/\$(git rev-parse HEAD)    ; popd ;
     pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/\$(git rev-parse HEAD) ; popd ;
     cd nuttx ;
     ( sleep 3600 ; echo Killing pytest after timeout... ; pkill -f pytest )&
@@ -96,14 +95,14 @@ function build_nuttx {
 }
 
 ## Build the Target for the Commit
-echo "Building This Commit: nuttx=$nuttx_hash, apps=$apps_hash"
+echo "Building This Commit: nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash"
 build_nuttx $nuttx_hash $apps_hash
 echo res=$res
 
 ## If it fails: Rebuild with Previous Commit and Next Commit
 if [[ "$res" != "0" ]]; then
   echo "***** BUILD FAILED FOR THIS COMMIT"
-  echo "Building Previous Commit: nuttx=$prev_hash, apps=$apps_hash"
+  echo "Building Previous Commit: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
   res=
   build_nuttx $prev_hash $apps_hash
   echo res=$res
@@ -111,7 +110,7 @@ if [[ "$res" != "0" ]]; then
     echo "***** BUILD FAILED FOR PREVIOUS COMMIT"
   fi
 
-  echo "Building Next Commit: nuttx=$next_hash, apps=$apps_hash"
+  echo "Building Next Commit: nuttx @ $next_hash / nuttx-apps @ $apps_hash"
   res=
   build_nuttx $next_hash $apps_hash
   echo res=$res

@@ -52,7 +52,13 @@ function build_commit {
   find_messages $log
 
   ## Upload the log
-  ## TODO: upload_log $log $job $nuttx_hash $apps_hash
+  local job=unknown
+  upload_log \
+    $log \
+    $job \
+    $nuttx_hash \
+    $apps_hash \
+    $timestamp
 }
 
 ## Run the Build Job
@@ -118,10 +124,11 @@ function upload_log {
   local job=$2
   local nuttx_hash=$3
   local apps_hash=$4
+  local timestamp=$5
   cat $log_file | \
     gh gist create \
     --public \
-    --desc "[$job] CI Log for nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash" \
+    --desc "[$job] CI Log for $target @ $timestamp / nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash" \
     --filename "ci-$job.log"
 }
 
@@ -138,12 +145,14 @@ apps_hash=$(git rev-parse HEAD)
 popd
 
 ## Build the Latest 20 Commits
+## TODO: num_commits=20
+num_commits=1
 git clone https://github.com/apache/nuttx
 cd nuttx
 for commit in $(
   TZ=UTC0 \
   git log \
-  -20 \
+  -$num_commits \
   --date='format-local:%Y-%m-%dT%H:%M:%S' \
   --format="%cd,%H"
 ); do
@@ -157,7 +166,7 @@ for commit in $(
     nuttx_hash=$next_hash
   fi; 
 
-  echo Building Commit $nuttx_hash  
+  echo Building nuttx @ $nuttx_hash / nuttx_apps @ $apps_hash
   build_commit \
     $tmp_dir/$nuttx_hash.log \
     $timestamp \
