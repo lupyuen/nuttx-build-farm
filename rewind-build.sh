@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for a bunch of Commits.
-## sudo ./rewind-build.sh ox64:nsh
+## Results will appear in the NuttX Dashboard > NuttX Build History
+## sudo sh -c '. ../github-token.sh && ./rewind-build.sh ox64:nsh'
 
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Latest Commit
 ## If it fails: Rebuild with Previous Commit and Next Commit
 ## Repeat with Previous 20 Commits
 ## Upload Every Build Log to GitHub Gist
+## github-token.sh contains `export GITHUB_TOKEN=...`
+## GitHub Token needs to have Gist Permission
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh
 
@@ -145,8 +148,8 @@ apps_hash=$(git rev-parse HEAD)
 popd
 
 ## Build the Latest 20 Commits
-## TODO: num_commits=20
-num_commits=3
+num_commits=20
+count=1
 git clone https://github.com/apache/nuttx
 cd nuttx
 for commit in $(
@@ -170,7 +173,7 @@ for commit in $(
     continue  ## Shift the Next into Present
   fi;
 
-  echo Building nuttx @ $nuttx_hash / nuttx_apps @ $apps_hash
+  set +x ; echo "***** #$count of $num_commits: Building nuttx @ $nuttx_hash / nuttx_apps @ $apps_hash" ; set -x ; sleep 10
   build_commit \
     $tmp_dir/$nuttx_hash.log \
     $timestamp \
@@ -187,6 +190,7 @@ for commit in $(
   prev_hash=$nuttx_hash
   nuttx_hash=$next_hash
   timestamp=$next_timestamp
+  ((count++))
 done
 
 ## Wait for Background Tasks to complete
