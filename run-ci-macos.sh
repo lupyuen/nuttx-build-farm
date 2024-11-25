@@ -81,6 +81,7 @@ echo Skipping $skip CI Jobs...
 ## arm-05: "nrf5340-dk/rpmsghci_nimble_cpuapp: apps/wireless/bluetooth/nimble/mynewt-nimble/nimble/host/services/gatt/src/ble_svc_gatt.c:174:9: error: variable 'rc' set but not used"
 ## arm-07: "ucans32k146/se05x: mv: illegal option -- T"
 ## xtensa-02: "esp32s3-devkit/qemu_debug: common/xtensa_hostfs.c:102:24: error: 'SIMCALL_O_NONBLOCK' undeclared"
+## xtensa-02: "esp32s3-devkit/knsh: sed: 1: invalid command code ."
 ## arm64-01: "imx93-evk/bootloader: ld: library not found for -lcrt0.o"
 ## sim-01, 02, 03: "clang: error: invalid argument 'medium' to -mcmodel="
 ## other: "micropendous3/hello: make: avr-objcopy: Bad CPU type in executable"
