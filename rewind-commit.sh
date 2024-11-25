@@ -64,9 +64,11 @@ sudo docker pull \
 
 ## Build NuttX in Docker Container
 ## If CI Test Hangs: Kill it after 1 hour
-## Print this Header and Footer:
+## We follow the CI Log Format, so that ingest-nuttx-builds will
+## ingest our log into NuttX Dashboard and appear in NuttX Build History
+## https://github.com/lupyuen/ingest-nuttx-builds/blob/main/src/main.rs
 ## ====================================================================================
-## Configuration/Tool: adafruit-kb2040/nshsram,CONFIG_ARM_TOOLCHAIN_GNU_EABI
+## Configuration/Tool: adafruit-kb2040/nshsram,
 ## 2024-11-25 03:25:20
 ## ------------------------------------------------------------------------------------
 function build_nuttx {
