@@ -152,12 +152,12 @@ cd nuttx
 for commit in $(
   TZ=UTC0 \
   git log \
-  -$num_commits \
+  -$(( $num_commits + 1 )) \
   --date='format-local:%Y-%m-%dT%H:%M:%S' \
   --format="%cd,%H"
 ); do
   ## Commit looks like 2024-11-24T09:52:42,9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
-  timestamp=$(echo $commit | cut -d ',' -f 1)  ## 2024-11-24T09:52:42
+  next_timestamp=$(echo $commit | cut -d ',' -f 1)  ## 2024-11-24T09:52:42
   next_hash=$(echo $commit | cut -d ',' -f 2)  ## 9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
   if [[ "$prev_hash" == "" ]]; then
     prev_hash=$next_hash
@@ -165,6 +165,10 @@ for commit in $(
   if [[ "$nuttx_hash" == "" ]]; then
     nuttx_hash=$next_hash
   fi; 
+  if [[ "$timestamp" == "" ]]; then
+    timestamp=$next_timestamp
+    continue  ## Shift the Next into Present
+  fi;
 
   echo Building nuttx @ $nuttx_hash / nuttx_apps @ $apps_hash
   build_commit \
@@ -182,6 +186,7 @@ for commit in $(
   ## Shift the Commits
   prev_hash=$nuttx_hash
   nuttx_hash=$next_hash
+  timestamp=$next_timestamp
 done
 
 ## Wait for Background Tasks to complete
