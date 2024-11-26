@@ -47,9 +47,10 @@ sudo gh auth login
 
 ## Run the Build Job forever: arm-01 ... arm-14
 sudo ./run-ci.sh
-```
 
-(GitHub Token should also work, see below)
+## Alternatively: Use a GitHub Token with Gist Permssion (see below)
+sudo sh -c '. ../github-token.sh && ./run-ci.sh'
+```
 
 To keep the Build Farm running after logout: Use `tmux`...
 
@@ -62,7 +63,15 @@ tmux
 tmux a
 ```
 
-For a super-duper Server-Class Xeon PC: Run multiple jobs `run-ci.sh`, `run-ci2.sh`, `run-ci3.sh`, `run-ci4.sh`
+For a super-duper Server-Class Xeon PC: Run multiple jobs with a different Instance ID...
+
+```bash
+## Remember to run tmux before each sudo
+sudo sh -c '. ../github-token.sh && ./run-ci.sh 1'
+sudo sh -c '. ../github-token.sh && ./run-ci.sh 2'
+sudo sh -c '. ../github-token.sh && ./run-ci.sh 3'
+sudo sh -c '. ../github-token.sh && ./run-ci.sh 4'
+```
 
 __To Join macOS Build Farm:__
 
