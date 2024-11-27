@@ -78,9 +78,9 @@ function run_job {
     " \
       $script_dir/rewind-commit.sh \
         $target \
-        $timestamp \
-        $apps_hash \
         $nuttx_hash \
+        $apps_hash \
+        $timestamp \
         $prev_hash \
         $next_hash \
     "

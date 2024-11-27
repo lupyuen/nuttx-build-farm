@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for One Single Commit.
-## sudo ./rewind-commit.sh ox64:nsh 2024-11-24T00:00:00 d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
+## sudo ./rewind-commit.sh ox64:nsh 7f84a64109f94787d92c2f44465e43fde6f3d28f d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 2024-11-24T00:00:00 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
 
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Commit
@@ -19,10 +19,10 @@ if [[ "$target" == "" ]]; then
   exit 1
 fi
 
-## Second Parameter is the Timestamp of the NuttX Repo, like "2024-11-24T00:00:00"
-timestamp=$2
-if [[ "$timestamp" == "" ]]; then
-  echo "ERROR: Timestamp is missing (e.g. ox64:nsh)"
+## Second Parameter is the Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
+nuttx_hash=$2
+if [[ "$nuttx_hash" == "" ]]; then
+  echo "ERROR: NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
   exit 1
 fi
 
@@ -33,25 +33,22 @@ if [[ "$apps_hash" == "" ]]; then
   exit 1
 fi
 
-## Fourth Parameter is the Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
-nuttx_hash=$4
-if [[ "$nuttx_hash" == "" ]]; then
-  echo "ERROR: NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
-  exit 1
+## Fourth Parameter is the Timestamp of the NuttX Commit, like "2024-11-24T00:00:00"
+timestamp=$4
+if [[ "$timestamp" == "" ]]; then
+  timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S")
 fi
 
 ## Fifth Parameter is the Previous Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
 prev_hash=$5
 if [[ "$prev_hash" == "" ]]; then
-  echo "ERROR: Previous NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
-  exit 1
+  prev_hash=$nuttx_hash
 fi
 
 ## Sixth Parameter is the Next Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
 next_hash=$6
 if [[ "$next_hash" == "" ]]; then
-  echo "ERROR: Next NuttX Hash is missing (e.g. 7f84a64109f94787d92c2f44465e43fde6f3d28f)"
-  exit 1
+  next_hash=$nuttx_hash
 fi
 
 ## Show the System Info
@@ -121,21 +118,26 @@ echo res=$res
 
 ## If it fails: Rebuild with Previous Commit and Next Commit
 if [[ "$res" != "0" ]]; then
-  echo "***** BUILD FAILED FOR THIS COMMIT"
-  echo "Building Previous Commit: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
-  res=
-  build_nuttx $prev_hash $apps_hash
-  echo res=$res
-  if [[ "$res" != "0" ]]; then
-    echo "***** BUILD FAILED FOR PREVIOUS COMMIT"
+  echo "***** BUILD FAILED FOR THIS COMMIT: nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash"
+
+  if [[ "$prev_hash" != "$nuttx_hash" ]]; then
+    echo "Building Previous Commit: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
+    res=
+    build_nuttx $prev_hash $apps_hash
+    echo res=$res
+    if [[ "$res" != "0" ]]; then
+      echo "***** BUILD FAILED FOR PREVIOUS COMMIT: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
+    fi
   fi
 
-  echo "Building Next Commit: nuttx @ $next_hash / nuttx-apps @ $apps_hash"
-  res=
-  build_nuttx $next_hash $apps_hash
-  echo res=$res
-  if [[ "$res" != "0" ]]; then
-    echo "***** BUILD FAILED FOR NEXT COMMIT"
+  if [[ "$next_hash" != "$nuttx_hash" ]]; then
+    echo "Building Next Commit: nuttx @ $next_hash / nuttx-apps @ $apps_hash"
+    res=
+    build_nuttx $next_hash $apps_hash
+    echo res=$res
+    if [[ "$res" != "0" ]]; then
+      echo "***** BUILD FAILED FOR NEXT COMMIT: nuttx @ $next_hash / nuttx-apps @ $apps_hash"
+    fi
   fi
 fi
 
