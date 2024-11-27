@@ -2,6 +2,7 @@
 ## Rewind the NuttX Build for a bunch of Commits.
 ## Results will appear in the NuttX Dashboard > NuttX Build History
 ## sudo sh -c '. ../github-token.sh && ./rewind-build.sh ox64:nsh'
+## sudo sh -c '. ../github-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
 
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Latest Commit
@@ -22,6 +23,12 @@ if [[ "$target" == "" ]]; then
   echo "ERROR: Target Parameter is missing (e.g. ox64:nsh)"
   exit 1
 fi
+
+## (Optional) Second Parameter is the Starting Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
+nuttx_commit=$2
+
+## (Optional) Third Parameter is the Commit Hash of NuttX Apps Repo, like "d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288"
+apps_commit=$3
 
 ## Get the Script Directory
 script_path="${BASH_SOURCE}"
@@ -141,17 +148,26 @@ rm -rf $tmp_dir
 mkdir -p $tmp_dir
 cd $tmp_dir
 
-## Get the Latest NuttX Apps Commit
-git clone https://github.com/apache/nuttx-apps apps
-pushd apps
-apps_hash=$(git rev-parse HEAD)
-popd
+## Get the Latest NuttX Apps Commit (if not provided)
+if [[ "$apps_commit" != "" ]]; then
+  apps_hash=$apps_commit
+else
+  git clone https://github.com/apache/nuttx-apps apps
+  pushd apps
+  apps_hash=$(git rev-parse HEAD)
+  popd
+fi
+
+## If NuttX Commit is provided: Rewind to the commit
+git clone https://github.com/apache/nuttx
+cd nuttx
+if [[ "$nuttx_commit" != "" ]]; then
+  git reset --hard $nuttx_commit
+fi
 
 ## Build the Latest 20 Commits
 num_commits=20
 count=1
-git clone https://github.com/apache/nuttx
-cd nuttx
 for commit in $(
   TZ=UTC0 \
   git log \

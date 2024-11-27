@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for One Single Commit.
 ## sudo ./rewind-commit.sh ox64:nsh 7f84a64109f94787d92c2f44465e43fde6f3d28f d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 2024-11-24T00:00:00 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
+## sudo ./rewind-commit.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c
 
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Commit
@@ -33,19 +34,19 @@ if [[ "$apps_hash" == "" ]]; then
   exit 1
 fi
 
-## Fourth Parameter is the Timestamp of the NuttX Commit, like "2024-11-24T00:00:00"
+## (Optional) Fourth Parameter is the Timestamp of the NuttX Commit, like "2024-11-24T00:00:00"
 timestamp=$4
 if [[ "$timestamp" == "" ]]; then
   timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S")
 fi
 
-## Fifth Parameter is the Previous Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
+## (Optional) Fifth Parameter is the Previous Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
 prev_hash=$5
 if [[ "$prev_hash" == "" ]]; then
   prev_hash=$nuttx_hash
 fi
 
-## Sixth Parameter is the Next Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
+## (Optional) Sixth Parameter is the Next Commit Hash of NuttX Repo, like "7f84a64109f94787d92c2f44465e43fde6f3d28f"
 next_hash=$6
 if [[ "$next_hash" == "" ]]; then
   next_hash=$nuttx_hash
