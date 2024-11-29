@@ -1,25 +1,35 @@
 #!/usr/bin/env bash
-## Run a NuttX CI Job on macOS
-## To re-download the toolchain: rm -rf /tmp/run-job-macos
+## Run a NuttX Build on macOS: ./run-build.macos.sh ox64:nsh
+## To re-download the toolchain: rm -rf /tmp/run-build-macos
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
 
-echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-job-macos.sh $1
-echo Called by https://github.com/lupyuen/nuttx-build-farm/blob/main/run-ci-macos.sh
+echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-build-macos.sh $1
 echo utc_time=$(date -u +'%Y-%m-%dT%H:%M:%S')
 echo local_time=$(date +'%Y-%m-%dT%H:%M:%S')
 
 set -e  #  Exit when any command fails
 set -x  #  Echo commands
 
-# Parameter is CI Job, like "arm-01"
-job=$1
-if [[ "$job" == "" ]]; then
-  echo "ERROR: Job Parameter is missing (e.g. arm-01)"
+## Parameter is NuttX Target, like "ox64:nsh"
+target=$1
+if [[ "$target" == "" ]]; then
+  echo "ERROR: Target Parameter is missing (e.g. ox64:nsh)"
+  exit 1
+fi
+
+## Extract the Board and Config from Target
+board=$(echo $target | cut -d ':' -f 1)
+config=$(echo $target | cut -d ':' -f 2)
+if [[ "$board" == "" ]]; then
+  echo "ERROR: Board is missing (e.g. ox64)"
+  exit 1
+fi
+if [[ "$config" == "" ]]; then
+  echo "ERROR: Config is missing (e.g. nsh)"
   exit 1
 fi
 
 ## Show the System Info
-set | grep TMUX || true
 neofetch
 uname -a
 
@@ -42,7 +52,7 @@ if [[ $(which ar) != "/usr/bin/ar" ]]; then
 fi
 
 ## Preserve the Tools Folder
-tmp_dir=/tmp/run-job-macos
+tmp_dir=/tmp/run-build-macos
 tools_dir=$tmp_dir/tools
 if [[ -d $tools_dir ]]; then
   rm -rf /tmp/tools
@@ -95,29 +105,27 @@ cat $file \
 mv $tmp_file $file
 chmod +x $file
 
-## Exclude clang Targets from macOS Build, because they will fail due to unknown arch
-## "/arm/lpc54xx,CONFIG_ARM_TOOLCHAIN_CLANG"
-## https://github.com/apache/nuttx/pull/14691#issuecomment-2466518544
-tmp_file=$tmp_dir/rewrite-testlist.dat
-for file in nuttx-patched/tools/ci/testlist/*.dat; do
-  grep -v "CLANG" \
-    $file \
-    >$tmp_file
-  mv $tmp_file $file
-done
-
 ## If CI Test Hangs: Kill it after 1 hour
 ( sleep 3600 ; echo Killing pytest after timeout... ; pkill -f pytest )&
+
+## Build this Target:
+## nuttx/boards/risc-v/bl808/ox64/configs/nsh/defconfig
+## nuttx/boards/arm/rp2040/raspberrypi-pico/configs/nsh/defconfig
+## /risc-v/bl602/bl602evb/configs/wifi
+## /risc-v/*/$board/configs/$config
+## /arm/[a]*,CONFIG_ARM_TOOLCHAIN_GNU_EABI
+## /arm/*/$board/configs/$config,CONFIG_ARM_TOOLCHAIN_GNU_EABI
+target_file=$tmp_dir/target.dat
+rm -f $target_file
+echo "/risc-v/*/$board/configs/$config" >>$target_file
+echo "/arm/*/$board/configs/$config,CONFIG_ARM_TOOLCHAIN_GNU_EABI" >>$target_file
 
 ## Run the CI Job in "nuttx-patched"
 ## ./cibuild.sh -i -c -A -R testlist/macos.dat
 ## ./cibuild.sh -i -c -A -R testlist/arm-01.dat
 pushd nuttx-patched/tools/ci
 (
-  ./cibuild.sh -i -c -A -R testlist/$job.dat \
+  ./cibuild.sh -i -c -A -R $target_file \
     || echo '***** BUILD FAILED'
 )
 popd
-
-## Monitor the Disk Space
-df -H
