@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-## Run a NuttX Build on macOS: ./run-build.macos.sh ox64:nsh
-## To re-download the toolchain: rm -rf /tmp/run-build-macos
+## Run a NuttX Build on macOS:
+##   ./run-build.macos.sh ox64:nsh
+##   ./run-build-macos.sh raspberrypi-pico:nsh
+## To re-download the toolchain:
+##   rm -rf /tmp/run-build-macos
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-build-macos.sh $1
@@ -108,13 +111,10 @@ chmod +x $file
 ## If CI Test Hangs: Kill it after 1 hour
 ( sleep 3600 ; echo Killing pytest after timeout... ; pkill -f pytest )&
 
-## Build this Target:
-## nuttx/boards/risc-v/bl808/ox64/configs/nsh/defconfig
-## nuttx/boards/arm/rp2040/raspberrypi-pico/configs/nsh/defconfig
-## /risc-v/bl602/bl602evb/configs/wifi
-## /risc-v/*/$board/configs/$config
-## /arm/[a]*,CONFIG_ARM_TOOLCHAIN_GNU_EABI
-## /arm/*/$board/configs/$config,CONFIG_ARM_TOOLCHAIN_GNU_EABI
+## CI Build expects this Target Format:
+## /risc-v/bl808/ox64/configs/nsh
+## /arm/rp2040/raspberrypi-pico/configs/nsh,CONFIG_ARM_TOOLCHAIN_GNU_EABI
+## TODO: Add arm64, x86_64, sim, ...
 target_file=$tmp_dir/target.dat
 rm -f $target_file
 echo "/risc-v/*/$board/configs/$config" >>$target_file
