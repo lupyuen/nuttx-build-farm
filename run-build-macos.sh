@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ## Download the NuttX Toolchains and Run a NuttX Build on macOS:
 ##   ./run-build-macos.sh raspberrypi-pico:nsh
-##   ./run-build.macos.sh ox64:nsh
+##   ./run-build-macos.sh ox64:nsh
 ##   ./run-build-macos.sh esp32s3-devkit:nsh
 ## To re-download the toolchain:
 ##   rm -rf /tmp/run-build-macos
