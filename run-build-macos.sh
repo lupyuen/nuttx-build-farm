@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-## Run a NuttX Build on macOS:
-##   ./run-build.macos.sh ox64:nsh
+## Download the NuttX Toolchains and Run a NuttX Build on macOS:
 ##   ./run-build-macos.sh raspberrypi-pico:nsh
+##   ./run-build.macos.sh ox64:nsh
+##   ./run-build-macos.sh esp32s3-devkit:nsh
 ## To re-download the toolchain:
 ##   rm -rf /tmp/run-build-macos
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
@@ -112,13 +113,15 @@ chmod +x $file
 ( sleep 3600 ; echo Killing pytest after timeout... ; pkill -f pytest )&
 
 ## CI Build expects this Target Format:
-## /risc-v/bl808/ox64/configs/nsh
 ## /arm/rp2040/raspberrypi-pico/configs/nsh,CONFIG_ARM_TOOLCHAIN_GNU_EABI
-## TODO: Add arm64, x86_64, sim, ...
+## /risc-v/bl808/ox64/configs/nsh
+## /xtensa/esp32s3/esp32s3-devkit/configs/nsh
+## TODO: Add arm64, sim, x86_64, ...
 target_file=$tmp_dir/target.dat
 rm -f $target_file
-echo "/risc-v/*/$board/configs/$config" >>$target_file
 echo "/arm/*/$board/configs/$config,CONFIG_ARM_TOOLCHAIN_GNU_EABI" >>$target_file
+echo "/risc-v/*/$board/configs/$config" >>$target_file
+echo "/xtensa/*/$board/configs/$config" >>$target_file
 
 ## Run the CI Job in "nuttx-patched"
 ## ./cibuild.sh -i -c -A -R testlist/macos.dat
