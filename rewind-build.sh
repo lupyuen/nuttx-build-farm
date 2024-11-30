@@ -12,7 +12,7 @@
 ## github-token.sh contains `export GITHUB_TOKEN=...`
 ## GitHub Token needs to have Gist Permission
 
-echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh
+echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh $1
 
 set -e  ## Exit when any command fails
 set -x  ## Echo commands

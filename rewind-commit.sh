@@ -7,7 +7,7 @@
 ## Build the Target for the Commit
 ## If it fails: Rebuild with Previous Commit and Next Commit
 
-echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-commit.sh
+echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-commit.sh $1 $2 $3 $4 $5 $6
 echo Called by https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh
 
 set -e  ## Exit when any command fails
