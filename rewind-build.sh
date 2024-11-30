@@ -196,17 +196,14 @@ for commit in $(
     $apps_hash \
     $nuttx_hash \
     $next_hash \
-    $prev_hash \
-    &
-
-  ## Throttle our downloads from GitHub
-  date ; sleep 60
+    $prev_hash
 
   ## Shift the Commits
   prev_hash=$nuttx_hash
   nuttx_hash=$next_hash
   timestamp=$next_timestamp
   ((count++))
+  date
 done
 
 ## Wait for Background Tasks to complete
@@ -214,4 +211,4 @@ fg || true
 
 ## Free up the Docker disk space
 sudo docker system prune --force
-echo "Done!"
+set +x ; echo "***** Done!" ; set -x
