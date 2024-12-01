@@ -116,11 +116,13 @@ chmod +x $file
 ## /arm/rp2040/raspberrypi-pico/configs/nsh,CONFIG_ARM_TOOLCHAIN_GNU_EABI
 ## /risc-v/bl808/ox64/configs/nsh
 ## /xtensa/esp32s3/esp32s3-devkit/configs/nsh
-## TODO: Add arm64, sim, x86_64, ...
 target_file=$tmp_dir/target.dat
 rm -f $target_file
 echo "/arm/*/$board/configs/$config,CONFIG_ARM_TOOLCHAIN_GNU_EABI" >>$target_file
+echo "/arm64/*/$board/configs/$config" >>$target_file
 echo "/risc-v/*/$board/configs/$config" >>$target_file
+echo "/sim/*/$board/configs/$config" >>$target_file
+echo "/x86_64/*/$board/configs/$config" >>$target_file
 echo "/xtensa/*/$board/configs/$config" >>$target_file
 
 ## Run the CI Job in "nuttx-patched"
