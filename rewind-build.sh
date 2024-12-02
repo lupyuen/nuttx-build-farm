@@ -176,17 +176,17 @@ for commit in $(
   --format="%cd,%H"
 ); do
   ## Commit looks like 2024-11-24T09:52:42,9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
-  next_timestamp=$(echo $commit | cut -d ',' -f 1)  ## 2024-11-24T09:52:42
-  next_hash=$(echo $commit | cut -d ',' -f 2)  ## 9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
-  if [[ "$prev_hash" == "" ]]; then
-    prev_hash=$next_hash
-  fi; 
+  prev_timestamp=$(echo $commit | cut -d ',' -f 1)  ## 2024-11-24T09:52:42
+  prev_hash=$(echo $commit | cut -d ',' -f 2)  ## 9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
+  if [[ "$next_hash" == "" ]]; then
+    next_hash=$prev_hash
+  fi;
   if [[ "$nuttx_hash" == "" ]]; then
-    nuttx_hash=$next_hash
-  fi; 
+    nuttx_hash=$prev_hash
+  fi;
   if [[ "$timestamp" == "" ]]; then
-    timestamp=$next_timestamp
-    continue  ## Shift the Next into Present
+    timestamp=$prev_timestamp
+    continue  ## Shift the Previous into Present
   fi;
 
   set +x ; echo "***** #$count of $num_commits: Building nuttx @ $nuttx_hash / nuttx_apps @ $apps_hash" ; set -x ; sleep 10
@@ -199,9 +199,9 @@ for commit in $(
     $next_hash
 
   ## Shift the Commits
-  prev_hash=$nuttx_hash
-  nuttx_hash=$next_hash
-  timestamp=$next_timestamp
+  next_hash=$nuttx_hash
+  nuttx_hash=$prev_hash
+  timestamp=$prev_timestamp
   ((count++))
   date
 done
