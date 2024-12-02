@@ -56,8 +56,8 @@ function build_commit {
     $timestamp \
     $apps_hash \
     $nuttx_hash \
-    $next_hash \
-    $prev_hash
+    $prev_hash \
+    $next_hash
   clean_log $log
   find_messages $log
 
@@ -195,8 +195,8 @@ for commit in $(
     $timestamp \
     $apps_hash \
     $nuttx_hash \
-    $next_hash \
-    $prev_hash
+    $prev_hash \
+    $next_hash
 
   ## Shift the Commits
   prev_hash=$nuttx_hash
