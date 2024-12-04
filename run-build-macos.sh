@@ -122,6 +122,7 @@ target_file=$tmp_dir/target.dat
 rm -f $target_file
 echo "/arm/*/$board/configs/$config,CONFIG_ARM_TOOLCHAIN_GNU_EABI" >>$target_file
 echo "/arm64/*/$board/configs/$config" >>$target_file
+echo "/avr/*/$board/configs/$config" >>$target_file
 echo "/risc-v/*/$board/configs/$config" >>$target_file
 echo "/sim/*/$board/configs/$config" >>$target_file
 echo "/x86_64/*/$board/configs/$config" >>$target_file
