@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-## Run All NuttX CI Jobs on macOS
+## Run All NuttX CI Jobs on macOS:
+##   brew install neofetch gh
+##   . $HOME/github-token.sh
+##   ./run-ci-macos.sh
+
+## github-token.sh contains `export GITHUB_TOKEN=...`
+## GitHub Token needs to have Gist Permission
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-ci-macos.sh

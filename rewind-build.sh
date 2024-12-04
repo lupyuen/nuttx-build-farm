@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for a bunch of Commits.
-## Results will appear in the NuttX Dashboard > NuttX Build History
-## sudo sh -c '. ../github-token.sh && ./rewind-build.sh ox64:nsh'
-## sudo sh -c '. ../github-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
+## Results will appear in the NuttX Dashboard > NuttX Build History:
+##   brew install neofetch gh
+##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh ox64:nsh'
+##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
 
 ## Given a NuttX Target (ox64:nsh):
-## Build the Target for the Latest Commit
-## If it fails: Rebuild with Previous Commit and Next Commit
-## Repeat with Previous 20 Commits
-## Upload Every Build Log to GitHub Gist
+##   Build the Target for the Latest Commit
+##   If it fails: Rebuild with Previous Commit and Next Commit
+##   Repeat with Previous 20 Commits
+##   Upload Every Build Log to GitHub Gist
+
 ## github-token.sh contains `export GITHUB_TOKEN=...`
 ## GitHub Token needs to have Gist Permission
 
