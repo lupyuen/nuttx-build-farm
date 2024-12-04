@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-## Run a NuttX CI Job on macOS
+## Run a NuttX CI Job on macOS:
+##   brew install neofetch
+##   ./run-job-macos.sh arm-01
+
 ## To re-download the toolchain: rm -rf /tmp/run-job-macos
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
 

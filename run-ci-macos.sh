@@ -6,6 +6,8 @@
 
 ## github-token.sh contains `export GITHUB_TOKEN=...`
 ## GitHub Token needs to have Gist Permission
+
+## To re-download the toolchain: rm -rf /tmp/run-job-macos
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-ci-macos.sh
