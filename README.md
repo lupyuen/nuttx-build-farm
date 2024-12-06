@@ -78,7 +78,7 @@ sudo sh -c '. ../gitlab-token.sh && ./run-ci.sh 4'
 
 __To Join macOS Build Farm:__
 
-Please tell me your Gist ID:
+Please tell me your User ID for GitLab Snippets or GitHub Gists:
 
 ```bash
 ## TODO: Install Xcode Command Line Tools, brew, autoconf, wget
@@ -89,16 +89,17 @@ brew install gh neofetch
 git clone https://github.com/lupyuen/nuttx-build-farm
 cd nuttx-build-farm
 
-## Set the GitHub Token: export GITHUB_TOKEN=...
-## To create GitHub Token: GitHub Settings > Developer Settings > Tokens (Classic) > Generate New Token (Classic)
-## Check the following:
-## repo (Full control of private repositories)
-## repo:status (Access commit status)
-## repo_deployment (Access deployment status)
-## public_repo (Access public repositories)
-## repo:invite (Access repository invitations)
-## security_events (Read and write security events)
-## gist (Create gists)
+## Set the GitLab Token: User Settings > Access Tokens > Select Scopes
+##   api: Grants complete read/write access to the API, including all groups and projects, the container registry, the dependency proxy, and the package registry.
+## gitlab-token.sh contains:
+##   export GITLAB_TOKEN=...
+##   export GITLAB_USER=lupyuen
+##   export GITLAB_REPO=nuttx-build-log
+. $HOME/gitlab-token-macos.sh
+
+## Or GitHub Token: Should have Gist Permission
+## github-token.sh contains:
+##   export GITHUB_TOKEN=...
 . $HOME/github-token-macos.sh
 
 ## Start the macOS Build Task
@@ -110,7 +111,7 @@ cd nuttx-build-farm
 
 [(See the Install Log)](https://gist.github.com/lupyuen/0603bbf9c6c6102c0446415602200f87)
 
-[(See the Build Logs)](https://gist.github.com/nuttxmacos)
+[(See the Build Logs)](https://gitlab.com/nuttxmacos2/nuttx-build-log/-/snippets/)
 
 __Warning:__ This will max out all 12 CPU Cores of Mac Mini M2 Pro. Running at a boiling hot 100 deg C!
 
