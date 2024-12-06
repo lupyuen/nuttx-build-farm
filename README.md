@@ -16,13 +16,13 @@ __Highly Esteemed Members of our NuttX Build Farm:__
 
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
 1.  [__lvanasse__](https://gist.github.com/lvanasse) (Ubuntu)
-1.  [__nuttxpr__](https://gist.github.com/nuttxpr) (Ubuntu i5)
-1.  [__nuttxlinux__](https://gist.github.com/nuttxlinux) (Ubuntu Xeon)
+1.  [__nuttxpr__](https://gist.github.com/nuttxpr) (Ubuntu Xeon and Ubuntu i5)
 1.  [__nuttxmacos__](https://gist.github.com/nuttxmacos) (macOS M2 Pro)
+1.  [__nuttxlinux__](https://gist.github.com/nuttxlinux) (blocked by GitHub sigh)
 
 __To Join Ubuntu Build Farm:__
 
-Please tell me your Gist ID. See ["Build NuttX for All Target Groups"](https://lupyuen.codeberg.page/articles/ci2.html#build-nuttx-for-all-target-groups).
+Please tell me your User ID for GitLab Snippets or GitHub Gist. See ["Build NuttX for All Target Groups"](https://lupyuen.codeberg.page/articles/ci2.html#build-nuttx-for-all-target-groups).
 
 ```bash
 ## TODO: Install Docker Engine
@@ -31,25 +31,26 @@ Please tell me your Gist ID. See ["Build NuttX for All Target Groups"](https://l
 ## Download the scripts
 git clone https://github.com/lupyuen/nuttx-release
 cd nuttx-release
+sudo apt install neofetch glab gh
 
-## Login to GitHub in Headless Mode
-sudo apt install gh neofetch
-sudo gh auth login
+## For GitLab Snippets:
+sudo sh -c '. ../gitlab-token.sh && ./run-ci.sh 1'
 
-## (1) What Account: "GitHub.com"
-## (2) Preferred Protocol: "HTTPS"
-## (3) Authenticate GitHub CLI: "Login with a web browser"
-## (4) Copy the One-Time Code, press Enter
-## (5) Press "q" to quit the Text Browser that appears
-## (6) Switch to Firefox Browser and load https://github.com/login/device
-## (7) Enter the One-Time Code. GitHub Login will proceed.
-## See https://stackoverflow.com/questions/78890002/how-to-do-gh-auth-login-when-run-in-headless-mode
+## For GitHub Gists:
+sudo sh -c '. ../github-token.sh && ./run-ci.sh 1'
 
-## Run the Build Job forever: arm-01 ... arm-14
-sudo ./run-ci.sh
+## Change '1' to a Unique Instance ID. Each instance of this script will run under a different Instance ID.
 
-## Alternatively: Use a GitHub Token with Gist Permssion (see below)
-sudo sh -c '. ../github-token.sh && ./run-ci.sh'
+## GitLab Token: User Settings > Access Tokens > Select Scopes
+##   api: Grants complete read/write access to the API, including all groups and projects, the container registry, the dependency proxy, and the package registry.
+## gitlab-token.sh contains:
+##   export GITLAB_TOKEN=...
+##   export GITLAB_USER=lupyuen
+##   export GITLAB_REPO=nuttx-build-log
+
+## GitHub Token: Should have Gist Permission
+## github-token.sh contains:
+##   export GITHUB_TOKEN=...
 ```
 
 To keep the Build Farm running after logout: Use `tmux`...
@@ -67,10 +68,10 @@ For a super-duper Server-Class Xeon PC: Run multiple jobs with a different Insta
 
 ```bash
 ## Remember to run tmux before each sudo
-sudo sh -c '. ../github-token.sh && ./run-ci.sh 1'
-sudo sh -c '. ../github-token.sh && ./run-ci.sh 2'
-sudo sh -c '. ../github-token.sh && ./run-ci.sh 3'
-sudo sh -c '. ../github-token.sh && ./run-ci.sh 4'
+sudo sh -c '. ../gitlab-token.sh && ./run-ci.sh 1'
+sudo sh -c '. ../gitlab-token.sh && ./run-ci.sh 2'
+sudo sh -c '. ../gitlab-token.sh && ./run-ci.sh 3'
+sudo sh -c '. ../gitlab-token.sh && ./run-ci.sh 4'
 ```
 
 __To Join macOS Build Farm:__
