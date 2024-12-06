@@ -17,8 +17,8 @@ __Highly Esteemed Members of our NuttX Build Farm:__
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
 1.  [__lvanasse__](https://gist.github.com/lvanasse) (Ubuntu)
 1.  [__lupyuen__](https://gitlab.com/lupyuen/nuttx-build-log/-/snippets/) (Ubuntu Xeon)
+1.  [__nuttxpr__](https://gist.github.com/nuttxpr) (Ubuntu i5)
 1.  [__nuttxmacos2__](https://gitlab.com/nuttxmacos2/nuttx-build-log/-/snippets/) (macOS M2 Pro)
-1.  [__nuttxpr__](https://gist.github.com/nuttxpr) (Ubuntu i5 and Ubuntu Xeon)
 1.  [__nuttxmacos__](https://gist.github.com/nuttxmacos) (blocked by GitHub sigh)
 1.  [__nuttxlinux__](https://gist.github.com/nuttxlinux) (blocked by GitHub sigh)
 
