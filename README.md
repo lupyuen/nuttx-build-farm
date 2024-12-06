@@ -1,4 +1,4 @@
-![Ubuntu and macOS Build Farm for Apache NuttX RTOS](https://lupyuen.github.io/images/ci3-title.jpg)
+![Ubuntu and macOS Build Farm for Apache NuttX RTOS](https://lupyuen.github.io/images/ci4-flow.jpg)
 
 # Ubuntu and macOS Build Farm for Apache NuttX RTOS
 
