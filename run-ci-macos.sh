@@ -14,6 +14,7 @@
 ##   export GITLAB_TOKEN=...
 ##   export GITLAB_USER=lupyuen
 ##   export GITLAB_REPO=nuttx-build-log
+## Which means the GitLab Snippets will be created in the existing GitLab Repo "lupyuen/nuttx-build-log"
 
 ## To re-download the toolchain: rm -rf /tmp/run-job-macos
 ## Read the article: https://lupyuen.codeberg.page/articles/ci2.html

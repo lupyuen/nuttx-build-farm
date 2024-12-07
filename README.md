@@ -41,7 +41,7 @@ sudo sh -c '. ../gitlab-token.sh && ./run-ci.sh 1'
 ## For GitHub Gists:
 sudo sh -c '. ../github-token.sh && ./run-ci.sh 1'
 
-## Change '1' to a Unique Instance ID. Each instance of this script will run under a different Instance ID.
+## Change '1' to a Unique Instance ID. Each instance of this script should run under a different Instance ID.
 
 ## GitLab Token: User Settings > Access Tokens > Select Scopes
 ##   api: Grants complete read/write access to the API, including all groups and projects, the container registry, the dependency proxy, and the package registry.
@@ -49,6 +49,7 @@ sudo sh -c '. ../github-token.sh && ./run-ci.sh 1'
 ##   export GITLAB_TOKEN=...
 ##   export GITLAB_USER=lupyuen
 ##   export GITLAB_REPO=nuttx-build-log
+## Which means the GitLab Snippets will be created in the existing GitLab Repo "lupyuen/nuttx-build-log"
 
 ## GitHub Token: Should have Gist Permission
 ## github-token.sh contains:
