@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for a bunch of Commits.
 ## Results will appear in the NuttX Dashboard > NuttX Build History:
-##   brew install neofetch gh
+##   brew install neofetch glab gh
 ##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh ox64:nsh'
+##   sudo sh -c '. ../gitlab-token.sh && ./rewind-build.sh ox64:nsh'
 ##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
+##   sudo sh -c '. ../gitlab-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
 
 ## Given a NuttX Target (ox64:nsh):
 ##   Build the Target for the Latest Commit
@@ -11,8 +13,17 @@
 ##   Repeat with Previous 20 Commits
 ##   Upload Every Build Log to GitHub Gist
 
-## github-token.sh contains `export GITHUB_TOKEN=...`
-## GitHub Token needs to have Gist Permission
+## GitHub Token: Should have Gist Permission
+## github-token.sh contains:
+##   export GITHUB_TOKEN=...
+
+## GitLab Token: User Settings > Access tokens > Select Scopes
+##   api: Grants complete read/write access to the API, including all groups and projects, the container registry, the dependency proxy, and the package registry.
+## gitlab-token.sh contains:
+##   export GITLAB_TOKEN=...
+##   export GITLAB_USER=lupyuen
+##   export GITLAB_REPO=nuttx-build-log
+## Which means the GitLab Snippets will be created in the existing GitLab Repo "lupyuen/nuttx-build-log"
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh $1
 
@@ -130,18 +141,37 @@ function find_messages {
   mv $tmp_file $log_file
 }
 
-## Upload to GitHub Gist
+## Upload to GitLab Snippet or GitHub Gist
 function upload_log {
   local log_file=$1
   local job=$2
   local nuttx_hash=$3
   local apps_hash=$4
   local timestamp=$5
-  cat $log_file | \
-    gh gist create \
-    --public \
-    --desc "[$job] CI Log for $target @ $timestamp / nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash" \
-    --filename "ci-$job.log"
+  local desc="[$job] CI Log for $target @ $timestamp / nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash"
+  local filename="ci-$job.log"
+  if [[ "$GITLAB_TOKEN" != "" ]]; then
+    if [[ "$GITLAB_USER" == "" ]]; then
+      echo '$GITLAB_USER is missing (e.g. lupyuen)'
+      exit 1
+    fi
+    if [[ "$GITLAB_REPO" == "" ]]; then
+      echo '$GITLAB_REPO is missing (e.g. nuttx-build-log)'
+      exit 1
+    fi
+    cat $log_file | \
+      glab snippet new \
+        --repo "$GITLAB_USER/$GITLAB_REPO" \
+        --visibility public \
+        --title "$desc" \
+        --filename "$filename"
+  else
+    cat $log_file | \
+      gh gist create \
+        --public \
+        --desc "$desc" \
+        --filename "$filename"
+  fi
 }
 
 ## Create the Temp Folder
