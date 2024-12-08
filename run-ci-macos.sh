@@ -17,7 +17,7 @@
 ## Which means the GitLab Snippets will be created in the existing GitLab Repo "lupyuen/nuttx-build-log"
 
 ## To re-download the toolchain: rm -rf /tmp/run-job-macos
-## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
+  ## Read the article: https://lupyuen.github.io/articles/ci5
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-ci-macos.sh
 device=ci

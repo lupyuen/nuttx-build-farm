@@ -7,7 +7,7 @@
 
 ## To re-download the toolchains:
 ##   rm -rf /tmp/run-build-macos
-## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
+## Read the article: https://lupyuen.github.io/articles/ci5
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-build-macos.sh $1
 echo utc_time=$(date -u +'%Y-%m-%dT%H:%M:%S')

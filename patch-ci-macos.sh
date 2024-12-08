@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Patch the NuttX CI Job for macOS (darwin_arm64.sh), so that it runs on Build Farm
-## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
+## Read the article: https://lupyuen.github.io/articles/ci5
 
 ## We change the Python Environment from:
 ##   python_tools() { ...

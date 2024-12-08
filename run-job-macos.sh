@@ -4,7 +4,7 @@
 ##   ./run-job-macos.sh arm-01
 
 ## To re-download the toolchain: rm -rf /tmp/run-job-macos
-## Read the article: https://lupyuen.codeberg.page/articles/ci2.html
+## Read the article: https://lupyuen.github.io/articles/ci5
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/run-job-macos.sh $1
 echo Called by https://github.com/lupyuen/nuttx-build-farm/blob/main/run-ci-macos.sh
