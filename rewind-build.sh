@@ -7,6 +7,10 @@
 ##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
 ##   sudo sh -c '. ../gitlab-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
 
+## Free up the Docker disk space:
+## (Warning: Will delete all Docker Containers currently NOT running!)
+##   sudo docker system prune --force
+
 ## Given a NuttX Target (ox64:nsh):
 ##   Build the Target for the Latest Commit
 ##   If it fails: Rebuild with Previous Commit and Next Commit
@@ -241,6 +245,4 @@ done
 ## Wait for Background Tasks to complete
 fg || true
 
-## Free up the Docker disk space
-sudo docker system prune --force
 set +x ; echo "***** Done!" ; set -x
