@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for a bunch of Commits.
 ## Results will appear in the NuttX Dashboard > NuttX Build History:
-##   brew install neofetch glab gh
+##   sudo apt install neofetch glab gh
 ##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh ox64:nsh'
 ##   sudo sh -c '. ../gitlab-token.sh && ./rewind-build.sh ox64:nsh'
 ##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
