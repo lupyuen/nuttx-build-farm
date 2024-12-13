@@ -85,6 +85,20 @@ git restore tools/ci
 git status
 popd
 
+## Remove "sudo" from the macOS CI Job for Apple Silicon, because it hangs the job, waiting for password: darwin_arm64.sh
+## https://github.com/apache/nuttx/pull/15146#issuecomment-2540844777
+## Change: sudo hdiutil attach ${basefile}.dmg
+## To:     ## NOTUSED: sudo hdiutil attach ${basefile}.dmg
+file=nuttx-patched/tools/ci/platforms/darwin_arm64.sh
+tmp_file=$tmp_dir/darwin_arm64.sh
+search='sudo'
+replace='## NOTUSED: sudo'
+cat $file \
+  | sed "s/$search/$replace/g" \
+  >$tmp_file
+mv $tmp_file $file
+chmod +x $file
+
 ## Patch the CI Job cibuild.sh to point to "nuttx-patched"
 ## Change: CIPLAT=${CIWORKSPACE}/nuttx/tools/ci/platforms
 ## To:     CIPLAT=${CIWORKSPACE}/nuttx-patched/tools/ci/platforms
