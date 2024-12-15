@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 ## Rewind the NuttX Build for a bunch of Commits.
+## Read the article: https://lupyuen.github.io/articles/ci6
 ## Results will appear in the NuttX Dashboard > NuttX Build History:
 ##   sudo apt install neofetch glab gh
 ##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh ox64:nsh'
