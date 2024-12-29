@@ -14,6 +14,8 @@ Read the articles...
 
 - ["Continuous Integration Dashboard for Apache NuttX RTOS (Prometheus and Grafana)"](https://lupyuen.github.io/articles/ci4)
 
+- ["(Experimental) Mastodon Server for Apache NuttX Continuous Integration (macOS Rancher Desktop)"](https://lupyuen.org/articles/mastodon.html)
+
 __Highly Esteemed Members of our NuttX Build Farm:__
 
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
