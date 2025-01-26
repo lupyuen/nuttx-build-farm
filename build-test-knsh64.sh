@@ -12,7 +12,12 @@ rm -rf $tmp_path
 mkdir $tmp_path
 cd $tmp_path
 
-## TODO: neofetch
+## Build and run "neofetch"
+git clone https://github.com/dylanaraps/neofetch
+pushd neofetch
+make -j install
+popd
+neofetch
 
 ## Build "tcl" (required by "expect")
 wget https://core.tcl-lang.org/tcl/tarball/release/tcl.tar.gz
@@ -20,7 +25,7 @@ tar xf tcl.tar.gz
 pushd tcl/unix
 ./configure
 make -j
-make install
+make -j install
 popd
 
 ## Build "expect"
@@ -30,7 +35,7 @@ tar xf expect5.45.4.tar.gz
 pushd expect5.45.4
 ./configure
 make -j
-make install
+make -j install
 popd
 
 ## Download NuttX and Apps
