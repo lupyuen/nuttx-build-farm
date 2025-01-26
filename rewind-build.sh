@@ -30,7 +30,7 @@
 ##   export GITLAB_REPO=nuttx-build-log
 ## Which means the GitLab Snippets will be created in the existing GitLab Repo "lupyuen/nuttx-build-log"
 
-echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh $1
+echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh $1 $2 $3
 
 set -e  ## Exit when any command fails
 set -x  ## Echo commands
