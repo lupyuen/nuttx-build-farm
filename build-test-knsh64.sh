@@ -14,24 +14,24 @@ cd $tmp_path
 
 ## TODO: neofetch
 
-wget https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz/download
-mv download expect5.45.4.tar.gz
-tar xvf expect5.45.4.tar.gz
-
+## Build "tcl" (required by "expect")
 wget https://core.tcl-lang.org/tcl/tarball/release/tcl.tar.gz
-tar xvf tcl.tar.gz
-
+tar xf tcl.tar.gz
 pushd tcl/unix
 ./configure
 make -j
 make install
 popd
 
+## Build "expect"
 pushd expect5.45.4
 ./configure
 make -j
 make install
 popd
+wget https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz/download
+mv download expect5.45.4.tar.gz
+tar xf expect5.45.4.tar.gz
 
 ## Download NuttX and Apps
 git clone https://github.com/apache/nuttx
