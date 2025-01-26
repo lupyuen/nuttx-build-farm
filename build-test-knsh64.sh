@@ -24,14 +24,14 @@ make install
 popd
 
 ## Build "expect"
+wget https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz/download
+mv download expect5.45.4.tar.gz
+tar xf expect5.45.4.tar.gz
 pushd expect5.45.4
 ./configure
 make -j
 make install
 popd
-wget https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz/download
-mv download expect5.45.4.tar.gz
-tar xf expect5.45.4.tar.gz
 
 ## Download NuttX and Apps
 git clone https://github.com/apache/nuttx
