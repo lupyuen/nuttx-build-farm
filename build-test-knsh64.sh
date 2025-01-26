@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Build and Test NuttX for QEMU RISC-V 64-bit (Kernel Build)
-echo "***** Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/build-test-knsh64.sh $1 $2"
+echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/build-test-knsh64.sh $1 $2"
 
 set -e  #  Exit when any command fails
 set -x  #  Echo commands
