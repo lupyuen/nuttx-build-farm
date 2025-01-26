@@ -3,6 +3,7 @@
 ## Read the article: https://lupyuen.github.io/articles/ci6
 ## sudo ./rewind-commit.sh ox64:nsh 7f84a64109f94787d92c2f44465e43fde6f3d28f d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288 2024-11-24T00:00:00 7f84a64109f94787d92c2f44465e43fde6f3d28f 7f84a64109f94787d92c2f44465e43fde6f3d28f
 ## sudo ./rewind-commit.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c
+## ./rewind-commit.sh rv-virt:knsh64_test HEAD HEAD
 
 ## Given a NuttX Target (ox64:nsh):
 ## Build the Target for the Commit
@@ -57,9 +58,9 @@ fi
 set | grep TMUX || true
 neofetch
 
-## Download the Docker Image
-sudo docker pull \
-  ghcr.io/apache/nuttx/apache-nuttx-ci-linux:latest
+## Get the Script Directory
+script_path="${BASH_SOURCE}"
+script_dir="$(cd -P "$(dirname -- "${script_path}")" >/dev/null 2>&1 && pwd)"
 
 ## Build NuttX in Docker Container
 ## If CI Test Hangs: Kill it after 1 hour
@@ -83,30 +84,44 @@ function build_nuttx {
   echo "------------------------------------------------------------------------------------"
   set -x  ## Enable Echo
 
-  set +e  ## Ignore errors
-  sudo docker run -it \
-    ghcr.io/apache/nuttx/apache-nuttx-ci-linux:latest \
-    /bin/bash -c "
-    set -e ;
-    set -x ;
-    uname -a ;
-    cd ;
-    pwd ;
-    git clone https://github.com/apache/nuttx ;
-    git clone https://github.com/apache/nuttx-apps apps ;
-    echo Building nuttx @ $nuttx_commit / nuttx-apps @ $apps_commit ;
-    pushd nuttx ; git reset --hard $nuttx_commit ; popd ;
-    pushd apps  ; git reset --hard $apps_commit  ; popd ;
-    pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/\$(git rev-parse HEAD)    ; popd ;
-    pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/\$(git rev-parse HEAD) ; popd ;
-    cd nuttx ;
-    ( sleep 3600 ; echo Killing pytest after timeout... ; pkill -f pytest )&
-    (
-      (./tools/configure.sh $target && make -j) || (res=\$? ; echo '***** BUILD FAILED' ; exit \$res)
-    )
-  "
-  res=$?
-  set -e  ## Exit when any command fails
+  if [[ "$target" == "rv-virt:knsh64_test" ]]; then
+    ## Build and Test Locally: QEMU RISC-V knsh64
+    set +e  ## Ignore errors
+    $script_dir/build-test-knsh64.sh $nuttx_commit $apps_commit
+    res=$?
+    set -e  ## Exit when any command fails
+  else
+    ## Build NuttX with Docker
+    ## Download the Docker Image
+    sudo docker pull \
+      ghcr.io/apache/nuttx/apache-nuttx-ci-linux:latest
+
+    set +e  ## Ignore errors
+    sudo docker run -it \
+      ghcr.io/apache/nuttx/apache-nuttx-ci-linux:latest \
+      /bin/bash -c "
+      set -e ;
+      set -x ;
+      uname -a ;
+      cd ;
+      pwd ;
+      git clone https://github.com/apache/nuttx ;
+      git clone https://github.com/apache/nuttx-apps apps ;
+      echo Building nuttx @ $nuttx_commit / nuttx-apps @ $apps_commit ;
+      pushd nuttx ; git reset --hard $nuttx_commit ; popd ;
+      pushd apps  ; git reset --hard $apps_commit  ; popd ;
+      pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/\$(git rev-parse HEAD)    ; popd ;
+      pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/\$(git rev-parse HEAD) ; popd ;
+      cd nuttx ;
+      ( sleep 3600 ; echo Killing pytest after timeout... ; pkill -f pytest )&
+      (
+        (./tools/configure.sh $target && make -j) || (res=\$? ; echo '***** BUILD FAILED' ; exit \$res)
+      )
+    "
+    res=$?
+    set -e  ## Exit when any command fails
+  fi
+
   set +x  ## Disable Echo
   echo res=$res
   echo "===================================================================================="
