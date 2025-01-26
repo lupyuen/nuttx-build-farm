@@ -76,10 +76,10 @@ cp .config nuttx.config
 make -j
 
 ## Build Apps Filesystem
-make export
+make -j export
 pushd ../apps
 ./tools/mkimport.sh -z -x ../nuttx/nuttx-export-*.tar.gz
-make import
+make -j import
 popd
 
 ## Show the size
