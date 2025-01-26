@@ -6,8 +6,8 @@
 ## ./rewind-commit.sh rv-virt:knsh64_test HEAD HEAD
 
 ## Given a NuttX Target (ox64:nsh):
-## Build the Target for the Commit
-## If it fails: Rebuild with Previous Commit and Next Commit
+## Build / Test the Target for the Commit
+## If it fails: Rebuild / Retest with Previous Commit and Next Commit
 
 echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-commit.sh $1 $2 $3 $4 $5 $6
 echo Called by https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh
@@ -128,14 +128,14 @@ function build_nuttx {
   set -x  ## Enable Echo
 }
 
-## Build the Target for the Commit
+## Build / Test the Target for the Commit
 echo "Building This Commit: nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash"
 build_nuttx $nuttx_hash $apps_hash
 echo res=$res
 
 ## If it fails: Rebuild with Previous Commit and Next Commit
 if [[ "$res" != "0" ]]; then
-  echo "***** BUILD FAILED FOR THIS COMMIT: nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash"
+  echo "***** BUILD / TEST FAILED FOR THIS COMMIT: nuttx @ $nuttx_hash / nuttx-apps @ $apps_hash"
 
   if [[ "$prev_hash" != "$nuttx_hash" ]]; then
     echo "Building Previous Commit: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
@@ -143,7 +143,7 @@ if [[ "$res" != "0" ]]; then
     build_nuttx $prev_hash $apps_hash
     echo res=$res
     if [[ "$res" != "0" ]]; then
-      echo "***** BUILD FAILED FOR PREVIOUS COMMIT: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
+      echo "***** BUILD / TEST FAILED FOR PREVIOUS COMMIT: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
     fi
   fi
 
@@ -153,7 +153,7 @@ if [[ "$res" != "0" ]]; then
     build_nuttx $next_hash $apps_hash
     echo res=$res
     if [[ "$res" != "0" ]]; then
-      echo "***** BUILD FAILED FOR NEXT COMMIT: nuttx @ $next_hash / nuttx-apps @ $apps_hash"
+      echo "***** BUILD / TEST FAILED FOR NEXT COMMIT: nuttx @ $next_hash / nuttx-apps @ $apps_hash"
     fi
   fi
 fi
