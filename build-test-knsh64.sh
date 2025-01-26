@@ -56,7 +56,7 @@ if [[ "$apps_hash" != "" ]]; then
   popd
 fi
 
-## Dump the git hash
+## Dump the NuttX and Apps Hash
 pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/$(git rev-parse HEAD) ; popd
 pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/$(git rev-parse HEAD) ; popd
 
@@ -65,27 +65,22 @@ riscv-none-elf-gcc -v
 rustup --version || true
 rustc  --version || true
 
-## Configure the build
+## Configure the NuttX Build
 cd nuttx
 tools/configure.sh rv-virt:knsh64
 
-## Preserve the build config
-cp .config nuttx.config
-
-## Run the build
+## Build the NuttX Kernel
 make -j
+riscv-none-elf-size nuttx
 
-## Build Apps Filesystem
+## Build the NuttX Apps
 make -j export
 pushd ../apps
 ./tools/mkimport.sh -z -x ../nuttx/nuttx-export-*.tar.gz
 make -j import
 popd
 
-## Show the size
-riscv-none-elf-size nuttx
-
-## Run the test
+## Run the NuttX Test
 qemu-system-riscv64 --version
 script=qemu-riscv-knsh64
 wget https://raw.githubusercontent.com/lupyuen/nuttx-riscv64/main/$script.exp
