@@ -11,32 +11,32 @@ tmp_path=/tmp/build-test-knsh64
 rm -rf $tmp_path
 mkdir $tmp_path
 cd $tmp_path
-
-## Build and run "neofetch"
-git clone https://github.com/dylanaraps/neofetch
-pushd neofetch
-make -j install
-popd
 neofetch
 
 ## Build "tcl" (required by "expect")
-wget https://core.tcl-lang.org/tcl/tarball/release/tcl.tar.gz
-tar xf tcl.tar.gz
-pushd tcl/unix
-./configure
-make -j
-make -j install
-popd
+# wget https://core.tcl-lang.org/tcl/tarball/release/tcl.tar.gz
+# tar xf tcl.tar.gz
+# pushd tcl/unix
+# ./configure
+# make -j
+# make -j install
+# popd
 
 ## Build "expect"
-wget https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz/download
-mv download expect5.45.4.tar.gz
-tar xf expect5.45.4.tar.gz
-pushd expect5.45.4
-./configure
-make -j
-make -j install
-popd
+# wget https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz/download
+# mv download expect5.45.4.tar.gz
+# tar xf expect5.45.4.tar.gz
+# pushd expect5.45.4
+# ./configure
+# make -j
+# make -j install
+# popd
+
+## Build "neofetch"
+# git clone https://github.com/dylanaraps/neofetch
+# pushd neofetch
+# make -j install
+# popd
 
 ## Download NuttX and Apps
 git clone https://github.com/apache/nuttx
@@ -89,5 +89,4 @@ riscv-none-elf-size nuttx
 qemu-system-riscv64 --version
 script=qemu-riscv-knsh64
 wget https://raw.githubusercontent.com/lupyuen/nuttx-riscv64/main/$script.exp
-chmod +x $script.exp
-./$script.exp
+expect ./$script.exp
