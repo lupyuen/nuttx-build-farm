@@ -34,8 +34,10 @@ if [[ "$apps_hash" != "" ]]; then
 fi
 
 ## Dump the NuttX and Apps Hash
+set +x  ## Disable Echo
 pushd nuttx ; echo NuttX Source: https://github.com/apache/nuttx/tree/$(git rev-parse HEAD) ; popd
 pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/$(git rev-parse HEAD) ; popd
+set -x  ## Enable Echo
 
 ## Show the GCC and Rust versions
 riscv-none-elf-gcc -v
