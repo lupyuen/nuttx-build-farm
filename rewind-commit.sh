@@ -147,6 +147,8 @@ if [[ "$res" != "0" ]]; then
     echo res=$res
     if [[ "$res" != "0" ]]; then
       echo "***** BUILD / TEST FAILED FOR PREVIOUS COMMIT: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
+    else
+      echo "***** Build / Test OK for Previous Commit: nuttx @ $prev_hash / nuttx-apps @ $apps_hash"
     fi
   fi
 
@@ -157,6 +159,8 @@ if [[ "$res" != "0" ]]; then
     echo res=$res
     if [[ "$res" != "0" ]]; then
       echo "***** BUILD / TEST FAILED FOR NEXT COMMIT: nuttx @ $next_hash / nuttx-apps @ $apps_hash"
+    else
+      echo "***** Build / Test OK for Next Commit: nuttx @ $next_hash / nuttx-apps @ $apps_hash"
     fi
   fi
 fi
