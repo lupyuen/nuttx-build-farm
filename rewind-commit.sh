@@ -84,9 +84,11 @@ function build_nuttx {
   echo "------------------------------------------------------------------------------------"
   set -x  ## Enable Echo
 
+  set +x  ## Disable Echo
   if [[ "$target" == "rv-virt:knsh64_test" ]]; then
     ## Build and Test Locally: QEMU RISC-V knsh64
     set +e  ## Ignore errors
+    set -x  ## Enable Echo
     $script_dir/build-test-knsh64.sh $nuttx_commit $apps_commit
     res=$?
     set -e  ## Exit when any command fails
@@ -97,6 +99,7 @@ function build_nuttx {
       ghcr.io/apache/nuttx/apache-nuttx-ci-linux:latest
 
     set +e  ## Ignore errors
+    set -x  ## Enable Echo
     sudo docker run -it \
       ghcr.io/apache/nuttx/apache-nuttx-ci-linux:latest \
       /bin/bash -c "
