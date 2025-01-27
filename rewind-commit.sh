@@ -85,7 +85,7 @@ function build_nuttx {
   set -x  ## Enable Echo
 
   set +x  ## Disable Echo
-  if [[ "$target" == "rv-virt:knsh64_test" ]]; then
+  if [[ "$target" == "rv-virt:knsh64_test"* ]]; then
     ## Build and Test Locally: QEMU RISC-V knsh64
     set +e  ## Ignore errors
     set -x  ## Enable Echo
