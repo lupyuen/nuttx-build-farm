@@ -272,7 +272,4 @@ for commit in $(
   date
 done
 
-## Wait for Background Tasks to complete
-fg || true
-
 set +x ; echo "***** Done!" ; set -x
