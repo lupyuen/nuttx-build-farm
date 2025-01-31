@@ -8,6 +8,7 @@
 ##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
 ##   sudo sh -c '. ../gitlab-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
 ##   . ../gitlab-token.sh && glab auth status && ./rewind-build.sh rv-virt:knsh64_test7 aa0aecbd80a2ce69ee33ced41b7677f8521acd43 a6b9e718460a56722205c2a84a9b07b94ca664aa
+##   . ../gitlab-token.sh && glab auth status && ./rewind-build.sh rv-virt:knsh64_test7 HEAD HEAD 1 20
 
 ## Free up the Docker disk space:
 ## (Warning: Will delete all Docker Containers currently NOT running!)
@@ -209,14 +210,13 @@ mkdir -p $tmp_dir
 cd $tmp_dir
 
 ## Get the Latest NuttX Apps Commit (if not provided)
+git clone https://github.com/apache/nuttx-apps apps
+pushd apps
 if [[ "$apps_commit" != "" ]]; then
-  apps_hash=$apps_commit
-else
-  git clone https://github.com/apache/nuttx-apps apps
-  pushd apps
-  apps_hash=$(git rev-parse HEAD)
-  popd
+  git reset --hard $apps_commit
 fi
+apps_hash=$(git rev-parse HEAD)
+popd
 
 ## If NuttX Commit is provided: Rewind to the commit
 git clone https://github.com/apache/nuttx
