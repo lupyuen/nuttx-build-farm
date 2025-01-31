@@ -31,7 +31,7 @@
 ##   export GITLAB_REPO=nuttx-build-log
 ## Which means the GitLab Snippets will be created in the existing GitLab Repo "lupyuen/nuttx-build-log"
 
-echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh $1 $2 $3
+echo Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/rewind-build.sh $1 $2 $3 $4 $5
 
 set -e  ## Exit when any command fails
 set -x  ## Echo commands
@@ -48,6 +48,18 @@ nuttx_commit=$2
 
 ## (Optional) Third Parameter is the Commit Hash of NuttX Apps Repo, like "d6edbd0cec72cb44ceb9d0f5b932cbd7a2b96288"
 apps_commit=$3
+
+## (Optional) Fourth Parameter is the Minimum Number of Commits to Build Successfully
+min_commits=$4
+if [[ "$min_commits" == "" ]]; then
+  min_commits=20
+fi
+
+## (Optional) Fifth Parameter is the Maximum Number of Commits to Build Successfully / Unsuccessfully
+max_commits=$5
+if [[ "$max_commits" == "" ]]; then
+  max_commits=20
+fi
 
 ## Get the Script Directory
 script_path="${BASH_SOURCE}"
@@ -145,6 +157,17 @@ function find_messages {
     >> $msg_file || true
   cat $msg_file $log_file >$tmp_file
   mv $tmp_file $log_file
+
+  ## Count the Successful Commits by non-matching "test fail"
+  ## ***** BUILD / TEST FAILED FOR THIS COMMIT: nuttx @ 657247bda89d60112d79bb9b8d223eca5f9641b5 / nuttx-apps @ a6b9e718460a56722205c2a84a9b07b94ca664aa
+  set +e  ## Ignore errors
+  grep -i "test fail" $msg_file
+  res=$?
+  set -e  ## Exit when any command fails
+  if [[ "$res" == "1" ]]; then  ## No Matches
+    ((num_success++))
+    break
+  fi
 }
 
 ## Upload to GitLab Snippet or GitHub Gist
@@ -204,7 +227,8 @@ if [[ "$nuttx_commit" != "" ]]; then
 fi
 
 ## Build the Latest 20 Commits
-num_commits=20
+num_commits=$max_commits
+num_success=0
 count=1
 for commit in $(
   TZ=UTC0 \
@@ -218,14 +242,14 @@ for commit in $(
   prev_hash=$(echo $commit | cut -d ',' -f 2)  ## 9f9cc7ecebd97c1a6b511a1863b1528295f68cd7
   if [[ "$next_hash" == "" ]]; then
     next_hash=$prev_hash
-  fi;
+  fi
   if [[ "$nuttx_hash" == "" ]]; then
     nuttx_hash=$prev_hash
-  fi;
+  fi
   if [[ "$timestamp" == "" ]]; then
     timestamp=$prev_timestamp
     continue  ## Shift the Previous into Present
-  fi;
+  fi
 
   set +x ; echo "***** #$count of $num_commits: Building nuttx @ $nuttx_hash / nuttx_apps @ $apps_hash" ; set -x ; sleep 10
   build_commit \
@@ -241,6 +265,11 @@ for commit in $(
   nuttx_hash=$prev_hash
   timestamp=$prev_timestamp
   ((count++))
+
+  ## Stop when we have reached the Minimum Number of Successful Commits
+  if [[ "$num_success" == "$min_commits" ]]; then
+    break
+  fi
   date
 done
 
