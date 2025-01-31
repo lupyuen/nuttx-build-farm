@@ -7,7 +7,7 @@
 ##   sudo sh -c '. ../gitlab-token.sh && ./rewind-build.sh ox64:nsh'
 ##   sudo sh -c '. ../github-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
 ##   sudo sh -c '. ../gitlab-token.sh && ./rewind-build.sh rv-virt:citest 656883fec5561ca91502a26bf018473ca0229aa4 3c4ddd2802a189fccc802230ab946d50a97cb93c'
-##   . ../gitlab-token.sh && glab auth status && ./rewind-build.sh rv-virt:knsh64_test4 aa0aecbd80a2ce69ee33ced41b7677f8521acd43 a6b9e718460a56722205c2a84a9b07b94ca664aa
+##   . ../gitlab-token.sh && glab auth status && ./rewind-build.sh rv-virt:knsh64_test7 aa0aecbd80a2ce69ee33ced41b7677f8521acd43 a6b9e718460a56722205c2a84a9b07b94ca664aa
 
 ## Free up the Docker disk space:
 ## (Warning: Will delete all Docker Containers currently NOT running!)
@@ -165,8 +165,7 @@ function find_messages {
   res=$?
   set -e  ## Exit when any command fails
   if [[ "$res" == "1" ]]; then  ## No Matches
-    ((num_success++))
-    break
+    ((num_success++)) || true
   fi
 }
 
@@ -264,7 +263,7 @@ for commit in $(
   next_hash=$nuttx_hash
   nuttx_hash=$prev_hash
   timestamp=$prev_timestamp
-  ((count++))
+  ((count++)) || true
 
   ## Stop when we have reached the Minimum Number of Successful Commits
   if [[ "$num_success" == "$min_commits" ]]; then
