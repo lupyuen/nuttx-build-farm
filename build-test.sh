@@ -95,6 +95,7 @@ function find_messages {
 ## Build and Test NuttX
 build_test \
   $script \
-  $log
+  $log \
+  $3 $4 $5 $6 $7 $8
 
 set +x ; echo "***** Done!" ; set -x
