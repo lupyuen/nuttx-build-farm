@@ -5,8 +5,8 @@
 ## ./build-test.sh knsh64 /tmp/build-test.log HEAD HEAD https://github.com/apache/nuttx master https://github.com/apache/nuttx-apps master
 echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/build-test.sh $1 $2 $3 $4 $5 $6 $7 $8"
 
-set -e  #  Exit when any command fails
-set -x  #  Echo commands
+set -e  ## Exit when any command fails
+set -x  ## Echo commands
 
 ## First Parameter is the Build Test Script, like "knsh64"
 script=$1
@@ -37,10 +37,16 @@ fi
 function build_test {
   local script=$1
   local log=$2
+
+  ## Propagate the Return Status from Script
   pushd /tmp
+  set +e  ## Ignore errors
   script $log \
+    --return \
     $script_option \
     "$script_dir/build-test-$script.sh $3 $4 $5 $6 $7 $8"
+  res=$?
+  set -e  ## Exit when any command fails
   popd
 
   ## Find errors and warnings
@@ -80,16 +86,6 @@ function find_messages {
     >> $msg_file || true
   cat $msg_file $log_file >$tmp_file
   mv $tmp_file $log_file
-
-  ## Count the Successful Commits by non-matching "test fail"
-  ## ***** BUILD / TEST FAILED FOR THIS COMMIT: nuttx @ 657247bda89d60112d79bb9b8d223eca5f9641b5 / nuttx-apps @ a6b9e718460a56722205c2a84a9b07b94ca664aa
-  set +e  ## Ignore errors
-  grep -i "test fail" $msg_file
-  res=$?
-  set -e  ## Exit when any command fails
-  if [[ "$res" == "1" ]]; then  ## No Matches
-    ((num_success++)) || true
-  fi
 }
 
 ## Build and Test NuttX
@@ -98,4 +94,5 @@ build_test \
   $log \
   $3 $4 $5 $6 $7 $8
 
-set +x ; echo "***** Done!" ; set -x
+set +x ; echo "***** Done! res=$res" ; set -x
+exit $res
