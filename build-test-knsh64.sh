@@ -1,24 +1,50 @@
 #!/usr/bin/env bash
 ## Build and Test NuttX for QEMU RISC-V 64-bit (Kernel Build)
+## ./build-test-knsh64.sh
 ## ./build-test-knsh64.sh HEAD HEAD
-echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/build-test-knsh64.sh $1 $2"
+## ./build-test-knsh64.sh HEAD HEAD https://github.com/apache/nuttx master https://github.com/apache/nuttx-apps master
+echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/build-test-knsh64.sh $1 $2 $3 $4 $5 $6"
 
 set -e  #  Exit when any command fails
 set -x  #  Echo commands
 
-nuttx_hash=$1  ## Optional NuttX Hash
-apps_hash=$2  ## Optional Apps Hash
+nuttx_hash=$1  ## Optional NuttX Hash (HEAD)
+apps_hash=$2   ## Optional Apps Hash (HEAD)
+nuttx_url=$3   ## Optional NuttX URL (https://github.com/apache/nuttx)
+nuttx_ref=$4   ## Optional NuttX Ref (master)
+apps_url=$5    ## Optional Apps URL (https://github.com/apache/nuttx-apps
+apps_ref=$6    ## Optional Apps Ref (master)
 neofetch
 
+## Set the defaults
+if [[ "$nuttx_hash" == "" ]]; then
+  nuttx_hash=HEAD
+fi
+if [[ "$apps_hash" == "" ]]; then
+  apps_hash=HEAD
+fi
+if [[ "$nuttx_url" == "" ]]; then
+  nuttx_url=https://github.com/apache/nuttx
+fi
+if [[ "$nuttx_ref" == "" ]]; then
+  nuttx_ref=master
+fi
+if [[ "$apps_url" == "" ]]; then
+  apps_url=https://github.com/apache/nuttx-apps
+fi
+if [[ "$apps_ref" == "" ]]; then
+  apps_ref=master
+fi
+
 ## Run in a Temp Folder
-tmp_path=/tmp/build-test-knsh64
+tmp_path=/tmp/build-test-knsh64-$nuttx_ref-$apps_ref
 rm -rf $tmp_path
 mkdir $tmp_path
 cd $tmp_path
 
 ## Download NuttX and Apps
-git clone https://github.com/apache/nuttx
-git clone https://github.com/apache/nuttx-apps apps
+git clone $nuttx_url nuttx --branch $nuttx_ref
+git clone $apps_url  apps  --branch $apps_ref
 
 ## Switch to this NuttX Commit
 if [[ "$nuttx_hash" != "" ]]; then
