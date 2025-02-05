@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Build and Test NuttX
+## Build and Test NuttX. Called by nuttx-test-bot.
 ## ./build-test.sh knsh64 /tmp/build-test.log
 ## ./build-test.sh knsh64 /tmp/build-test.log HEAD HEAD
 ## ./build-test.sh knsh64 /tmp/build-test.log HEAD HEAD https://github.com/apache/nuttx master https://github.com/apache/nuttx-apps master
