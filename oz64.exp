@@ -1,0 +1,27 @@
+#!/usr/bin/expect
+## Expect Script for Testing NuttX on Oz64 SG2000, over SSH to SBC
+
+## Wait at most 300 seconds
+set timeout 300
+
+## For every 1 character sent, wait 0.001 milliseconds
+set send_slow {1 0.001}
+
+## Connect to SBC over SSH
+spawn ssh $::env(OZ64_SERVER)
+
+## Wake up SBC
+send -s "\r"
+
+## Connect to USB Serial Terminal
+expect "$"
+send -s "screen /dev/ttyUSB0 115200"
+
+## Terminate the session: Ctrl-A k y
+send "\x01ky"
+
+## Logout from SBC
+expect "$"
+send -s "exit\r"
+
+puts "\n===== Test OK\n"
