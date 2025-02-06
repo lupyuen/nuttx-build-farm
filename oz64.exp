@@ -1,11 +1,11 @@
 #!/usr/bin/expect
 ## Expect Script for Testing NuttX on Oz64 SG2000, over SSH to SBC
 
-## Wait at most 300 seconds
-set timeout 300
-
 ## For every 1 character sent, wait 0.001 milliseconds
 set send_slow {1 0.001}
+
+## Wait at most 10 seconds
+set timeout 10
 
 ## Connect to SBC over SSH
 spawn ssh $::env(OZ64_SERVER)
@@ -13,15 +13,92 @@ spawn ssh $::env(OZ64_SERVER)
 ## Wake up SBC
 send -s "\r"
 
-## Connect to USB Serial Terminal
+## Connect to SBC over USB Serial Port
 expect "$"
-send -s "screen /dev/ttyUSB0 115200"
+send -s "screen -x\r"
+
+## Wait a while
+sleep 5
 
 ## Terminate the session: Ctrl-A k y
-send "\x01ky"
+send -s "\x01ky"
+send -s "\r"
+sleep 5
 
-## Logout from SBC
+## Connect to USB Serial Terminal
 expect "$"
-send -s "exit\r"
+send -s "screen /dev/ttyUSB0 115200\r"
 
-puts "\n===== Test OK\n"
+## Wait at most 10 seconds to boot
+set timeout 10
+
+## Wait for the prompt and enter `uname -a`
+expect {
+  "nsh> " {}
+
+  ## If timeout, exit with an error
+  timeout { 
+    ## Terminate the session: Ctrl-A k y
+    send -s "\x01ky"
+    send -s "exit\r"
+    puts "\n===== Error: Test Failed\n"
+    exit 1 
+  }
+}
+send -s "uname -a\r"
+
+## Wait at most 120 seconds for other commands
+set timeout 120
+
+## Wait for the prompt and enter `free`
+expect "nsh> "
+send -s "free\r"
+
+## Wait for the prompt and enter `ps`
+expect "nsh> "
+send -s "ps\r"
+
+## Wait for the prompt and enter `ls -l /dev`
+expect "nsh> "
+send -s "ls -l /dev\r"
+
+## Wait for the prompt and enter `hello`
+expect "nsh> "
+send -s "hello\r"
+
+## Wait for the prompt and enter `getprime`
+expect "nsh> "
+send -s "getprime\r"
+
+## Wait for the prompt and enter `hello`
+expect "nsh> "
+send -s "hello\r"
+
+## Wait for the prompt and enter `getprime`
+expect "nsh> "
+send -s "getprime\r"
+
+## Wait for the prompt and enter `ostest`
+expect "nsh> "
+send -s "ostest\r"
+
+## Check the response...
+expect {
+  ## If we see this message, exit normally
+  "ostest_main: Exiting with status 0" { 
+    ## Terminate the session: Ctrl-A k y
+    send -s "\x01ky"
+    send -s "exit\r"
+    puts "\n===== Test OK\n"
+    exit 0 
+  }
+
+  ## If timeout, exit with an error
+  timeout { 
+    ## Terminate the session: Ctrl-A k y
+    send -s "\x01ky"
+    send -s "exit\r"
+    puts "\n===== Error: Test Failed\n"
+    exit 1 
+  }
+}
