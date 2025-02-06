@@ -1,20 +1,28 @@
-![Ubuntu and macOS Build Farm for Apache NuttX RTOS](https://lupyuen.github.io/images/ci4-flow.jpg)
+![Ubuntu and macOS Build Farm for Apache NuttX RTOS](https://lupyuen.org/images/ci4-flow.jpg)
 
 # Ubuntu and macOS Build Farm for Apache NuttX RTOS
 
 Read the articles...
 
-- ["Your very own Build Farm for Apache NuttX RTOS"](https://lupyuen.codeberg.page/articles/ci2.html)
+- ["Your very own Build Farm for Apache NuttX RTOS"](https://lupyuen.org/articles/ci2.html)
 
-- ["macOS Build Farm for Apache NuttX RTOS (Apple Silicon)"](https://lupyuen.github.io/articles/ci5)
+- ["macOS Build Farm for Apache NuttX RTOS (Apple Silicon)"](https://lupyuen.org/articles/ci5)
 
-- ["Rewinding a Build for Apache NuttX RTOS (Docker)"](https://lupyuen.github.io/articles/ci6)
+- ["Rewinding a Build for Apache NuttX RTOS (Docker)"](https://lupyuen.org/articles/ci6)
 
-- ["Optimising the Continuous Integration for Apache NuttX RTOS (GitHub Actions)"](https://lupyuen.codeberg.page/articles/ci3.html)
+- ["Optimising the Continuous Integration for Apache NuttX RTOS (GitHub Actions)"](https://lupyuen.org/articles/ci3.html)
 
-- ["Continuous Integration Dashboard for Apache NuttX RTOS (Prometheus and Grafana)"](https://lupyuen.github.io/articles/ci4)
+- ["Continuous Integration Dashboard for Apache NuttX RTOS (Prometheus and Grafana)"](https://lupyuen.org/articles/ci4)
 
-- ["(Experimental) Mastodon Server for Apache NuttX Continuous Integration (macOS Rancher Desktop)"](https://lupyuen.org/articles/mastodon.html)
+- ["Mastodon Server for Continuous Integration (Apache NuttX RTOS)"](https://lupyuen.org/articles/mastodon.html)
+
+- ["Failing a Continuous Integration Test for Apache NuttX RTOS (QEMU RISC-V)"](https://lupyuen.org/articles/ci7)
+
+- ["Git Bisecting a Bug (Apache NuttX RTOS)"](https://lupyuen.org/articles/bisect)
+
+- ["Forgejo Git Forge for Apache NuttX RTOS (Experimental)"](https://lupyuen.org/articles/forgejo)
+
+- ["Fixing a uname bug (Apache NuttX RTOS)"](https://lupyuen.org/articles/uname)
 
 __Highly Esteemed Members of our NuttX Build Farm:__
 
@@ -28,7 +36,7 @@ __Highly Esteemed Members of our NuttX Build Farm:__
 
 __To Join Ubuntu Build Farm:__
 
-Please tell me your User ID for GitLab Snippets or GitHub Gist. See ["Build NuttX for All Target Groups"](https://lupyuen.codeberg.page/articles/ci2.html#build-nuttx-for-all-target-groups).
+Please tell me your User ID for GitLab Snippets or GitHub Gist. See ["Build NuttX for All Target Groups"](https://lupyuen.org/articles/ci2.html#build-nuttx-for-all-target-groups).
 
 ```bash
 ## TODO: Install Docker Engine
@@ -120,4 +128,4 @@ cd nuttx-build-farm
 
 __Warning:__ This will max out all 12 CPU Cores of Mac Mini M2 Pro. Running at a boiling hot 100 deg C!
 
-![This will max out all 12 CPU Cores of Mac Mini M2 Pro. Running at a boiling hot 100 deg C!](https://lupyuen.github.io/images/ci5-arm32.png)
+![This will max out all 12 CPU Cores of Mac Mini M2 Pro. Running at a boiling hot 100 deg C!](https://lupyuen.org/images/ci5-arm32.png)
