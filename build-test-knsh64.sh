@@ -37,7 +37,9 @@ if [[ "$apps_ref" == "" ]]; then
 fi
 
 ## Run in a Temp Folder
-tmp_path=/tmp/build-test-knsh64-$nuttx_ref-$apps_ref
+nuttx_ref2=$(echo $nuttx_ref | tr '/' '_')
+apps_ref2=$(echo $apps_ref | tr '/' '_')
+tmp_path=/tmp/build-test-oz64-$nuttx_ref2-$apps_ref2
 rm -rf $tmp_path
 mkdir $tmp_path
 cd $tmp_path
