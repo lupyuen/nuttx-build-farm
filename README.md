@@ -24,6 +24,8 @@ Read the articles...
 
 - ["Fixing a uname bug (Apache NuttX RTOS)"](https://lupyuen.org/articles/uname)
 
+- ["Auto-Rewind for Daily Test (Apache NuttX RTOS)"](https://lupyuen.org/articles/rewind.html)
+
 __Highly Esteemed Members of our NuttX Build Farm:__
 
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
