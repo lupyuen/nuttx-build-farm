@@ -2,7 +2,7 @@
 ## Expect Script for Testing NuttX on Oz64 SG2000, over SSH to SBC
 puts "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/oz64.exp"
 
-## For every 1 character sent, wait 0.001 milliseconds
+## For every 1 character sent, wait 1 millisecond
 set send_slow {1 0.001}
 
 ## Wait at most 60 seconds
