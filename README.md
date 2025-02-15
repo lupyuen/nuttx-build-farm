@@ -26,6 +26,8 @@ Read the articles...
 
 - ["Auto-Rewind for Daily Test (Apache NuttX RTOS)"](https://lupyuen.org/articles/rewind.html)
 
+- ["Test Bot for Pull Requests ... Tested on Real Hardware (Apache NuttX RTOS / Oz64 SG2000 RISC-V SBC)"](https://lupyuen.org/articles/testbot.html)
+
 __Highly Esteemed Members of our NuttX Build Farm:__
 
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
