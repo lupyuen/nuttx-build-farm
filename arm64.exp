@@ -1,0 +1,98 @@
+#!/usr/bin/expect
+## Expect Script for Testing NuttX on Arm64 QEMU
+puts "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/arm64.exp"
+
+## For every 1 character sent, wait 1 millisecond
+set send_slow {1 0.001}
+
+## Wait at most 60 seconds
+set timeout 60
+
+## Boot NuttX on Arm64 QEMU:
+## Single Core with virtio network, block, rng, serial driver (GICv3)
+## https://nuttx.apache.org/docs/latest/platforms/arm64/qemu/boards/qemu-armv8a/index.html
+spawn qemu-system-aarch64 \
+  -cpu cortex-a53 \
+  -nographic \
+  -machine virt,virtualization=on,gic-version=3 \
+  -chardev stdio,id=con,mux=on \
+  -serial chardev:con \
+  -global virtio-mmio.force-legacy=false \
+  -device virtio-serial-device,bus=virtio-mmio-bus.0 \
+  -chardev socket,telnet=on,host=127.0.0.1,port=3450,server=on,wait=off,id=foo \
+  -device virtconsole,chardev=foo \
+  -device virtio-rng-device,bus=virtio-mmio-bus.1 \
+  -netdev user,id=u1,hostfwd=tcp:127.0.0.1:10023-10.0.2.15:23,hostfwd=tcp:127.0.0.1:15001-10.0.2.15:5001 \
+  -device virtio-net-device,netdev=u1,bus=virtio-mmio-bus.2 \
+  -drive file=./mydisk-1gb.img,if=none,format=raw,id=hd \
+  -device virtio-blk-device,bus=virtio-mmio-bus.3,drive=hd \
+  -mon chardev=con,mode=readline \
+  -kernel ./nuttx
+
+## Wait for the prompt and enter `uname -a`
+expect {
+  "nsh> " {}
+
+  ## If timeout, exit with an error
+  timeout { 
+    ## Terminate the session: Ctrl-A x
+    send -s "\x01x"
+    puts "\n===== Error: Test Failed\n"
+    exit 1 
+  }
+}
+send -s "uname -a\r"
+
+## Wait at most 300 seconds for other commands
+set timeout 300
+
+## Wait for the prompt and enter `free`
+expect "nsh> "
+send -s "free\r"
+
+## Wait for the prompt and enter `ps`
+expect "nsh> "
+send -s "ps\r"
+
+## Wait for the prompt and enter `ls -l /dev`
+expect "nsh> "
+send -s "ls -l /dev\r"
+
+## Wait for the prompt and enter `hello`
+expect "nsh> "
+send -s "hello\r"
+
+## Wait for the prompt and enter `getprime`
+expect "nsh> "
+send -s "getprime\r"
+
+## Wait for the prompt and enter `hello`
+expect "nsh> "
+send -s "hello\r"
+
+## Wait for the prompt and enter `getprime`
+expect "nsh> "
+send -s "getprime\r"
+
+## Wait for the prompt and enter `ostest`
+expect "nsh> "
+send -s "ostest\r"
+
+## Check the response...
+expect {
+  ## If we see this message, exit normally
+  "ostest_main: Exiting with status 0" { 
+    ## Terminate the session: Ctrl-A x
+    send -s "\x01x"
+    puts "\n===== Test OK\n"
+    exit 0 
+  }
+
+  ## If timeout, exit with an error
+  timeout { 
+    ## Terminate the session: Ctrl-A x
+    send -s "\x01x"
+    puts "\n===== Error: Test Failed\n"
+    exit 1 
+  }
+}

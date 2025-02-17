@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-## Build and Test NuttX for QEMU RISC-V 64-bit (Kernel Build)
-## ./build-test-knsh64.sh
-## ./build-test-knsh64.sh HEAD HEAD
-## ./build-test-knsh64.sh HEAD HEAD https://github.com/apache/nuttx master https://github.com/apache/nuttx-apps master
-echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/build-test-knsh64.sh $1 $2 $3 $4 $5 $6"
+## Build and Test NuttX for QEMU Arm64 (qemu-armv8a:netnsh)
+## ./build-test-arm64.sh
+## ./build-test-arm64.sh HEAD HEAD
+## ./build-test-arm64.sh HEAD HEAD https://github.com/apache/nuttx master https://github.com/apache/nuttx-apps master
+echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/build-test-arm64.sh $1 $2 $3 $4 $5 $6"
 
 set -e  #  Exit when any command fails
 set -x  #  Echo commands
@@ -36,10 +36,14 @@ if [[ "$apps_ref" == "" ]]; then
   apps_ref=master
 fi
 
+## Get the Script Directory
+script_path="${BASH_SOURCE}"
+script_dir="$(cd -P "$(dirname -- "${script_path}")" >/dev/null 2>&1 && pwd)"
+
 ## Run in a Temp Folder
 nuttx_ref2=$(echo $nuttx_ref | tr '/' '_')
 apps_ref2=$(echo $apps_ref | tr '/' '_')
-tmp_path=/tmp/build-test-knsh64-$nuttx_ref2-$apps_ref2
+tmp_path=/tmp/build-test-arm64-$nuttx_ref2-$apps_ref2
 rm -rf $tmp_path
 mkdir $tmp_path
 cd $tmp_path
@@ -69,52 +73,21 @@ pushd apps  ; echo NuttX Apps: https://github.com/apache/nuttx-apps/tree/$(git r
 set -x  ## Enable Echo
 
 ## Show the GCC and Rust versions
-riscv-none-elf-gcc -v
+aarch64-none-elf-gcc -v
 rustup --version || true
 rustc  --version || true
 
 ## Configure the NuttX Build
 cd nuttx
-tools/configure.sh rv-virt:knsh64
+tools/configure.sh qemu-armv8a:netnsh
 
-## Build the NuttX Kernel
+## Build the NuttX Kernel and Apps
 make -j
-riscv-none-elf-size nuttx
+aarch64-none-elf-size nuttx
 
-## Build the NuttX Apps
-make -j export
-pushd ../apps
-./tools/mkimport.sh -z -x ../nuttx/nuttx-export-*.tar.gz
-make -j import
-popd
+## Build the NuttX Filesystem
+dd if=/dev/zero of=./mydisk-1gb.img bs=1M count=1024
 
 ## Run the NuttX Test
-qemu-system-riscv64 --version
-script=qemu-riscv-knsh64
-wget https://raw.githubusercontent.com/lupyuen/nuttx-riscv64/main/$script.exp
-expect ./$script.exp
-
-## Build "tcl" (required by "expect")
-# wget https://core.tcl-lang.org/tcl/tarball/release/tcl.tar.gz
-# tar xf tcl.tar.gz
-# pushd tcl/unix
-# ./configure
-# make -j
-# make -j install
-# popd
-
-## Build "expect"
-# wget https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz/download
-# mv download expect5.45.4.tar.gz
-# tar xf expect5.45.4.tar.gz
-# pushd expect5.45.4
-# ./configure
-# make -j
-# make -j install
-# popd
-
-## Build "neofetch"
-# git clone https://github.com/dylanaraps/neofetch
-# pushd neofetch
-# make -j install
-# popd
+qemu-system-aarch64 --version
+expect $script_dir/arm64.exp
