@@ -24,6 +24,8 @@ Read the articles...
 
 - ["Fixing a uname bug (Apache NuttX RTOS)"](https://lupyuen.org/articles/uname)
 
+- ["Rewinding a Build" for Apache NuttX RTOS (Docker)"](https://lupyuen.org/articles/ci6.html)
+
 - ["Auto-Rewind for Daily Test (Apache NuttX RTOS)"](https://lupyuen.org/articles/rewind.html)
 
 - ["Test Bot for Pull Requests ... Tested on Real Hardware (Apache NuttX RTOS / Oz64 SG2000 RISC-V SBC)"](https://lupyuen.org/articles/testbot.html)
