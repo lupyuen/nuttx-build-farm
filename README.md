@@ -30,6 +30,8 @@ Read the articles...
 
 - ["Test Bot for Pull Requests ... Tested on Real Hardware (Apache NuttX RTOS / Oz64 SG2000 RISC-V SBC)"](https://lupyuen.org/articles/testbot.html)
 
+- ["QEMU Test Bot for Pull Requests: Beware of Semihosting Breakout (Apache NuttX RTOS)"](https://lupyuen.org/articles/testbot2.html)
+
 __Highly Esteemed Members of our NuttX Build Farm:__
 
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
