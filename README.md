@@ -32,6 +32,8 @@ Read the articles...
 
 - ["QEMU Test Bot for Pull Requests: Beware of Semihosting Breakout (Apache NuttX RTOS)"](https://lupyuen.org/articles/testbot2.html)
 
+- ["PR Test Bot for PinePhone (Apache NuttX RTOS)"](https://lupyuen.org/articles/testbot3.html)
+
 __Highly Esteemed Members of our NuttX Build Farm:__
 
 1.  [__jerpelea__](https://gist.github.com/jerpelea)  (Ubuntu)
