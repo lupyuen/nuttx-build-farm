@@ -111,4 +111,4 @@ ssh $STARPRO64_SERVER ls -l /tftpboot/Image-starpro64
 
 ## Run the NuttX Test
 cd $script_dir
-## TODO: expect ./starpro64.exp
+echo TODO: expect ./starpro64.exp
