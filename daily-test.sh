@@ -8,10 +8,6 @@
 ## export GITHUB_TOKEN=...
 . $HOME/github-token.sh
 
-## Or GitLab Token
-## export GITLAB_TOKEN=...
-## . $HOME/gitlab-token.sh
-
 ## TODO
 export PATH=$HOME/xpack-riscv-none-elf-gcc-13.2.0-2/bin:$PATH
 export PATH=$HOME/arm-gnu-toolchain-13.2.Rel1-x86_64-aarch64-none-elf/bin:$PATH
