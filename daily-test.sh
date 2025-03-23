@@ -6,11 +6,11 @@
 
 ## Set the GitHub Token
 ## export GITHUB_TOKEN=...
-. $HOME/github-token-macos.sh
+. $HOME/github-token.sh
 
 ## Or GitLab Token
 ## export GITLAB_TOKEN=...
-## . $HOME/gitlab-token-macos.sh
+## . $HOME/gitlab-token.sh
 
 ## TODO
 export PATH=$HOME/xpack-riscv-none-elf-gcc-13.2.0-2/bin:$PATH
