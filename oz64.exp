@@ -11,8 +11,9 @@ set timeout 60
 ## Connect to SBC over SSH
 spawn ssh $::env(OZ64_SERVER)
 
-## Wake up SBC
+## Wake up SBC. Set TERM for `screen`.
 send -s "\r"
+send -s "export TERM=xterm-256color\r"
 
 ## Connect to SBC over USB Serial Port
 expect "$"
