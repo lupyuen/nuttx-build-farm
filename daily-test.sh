@@ -24,7 +24,8 @@ script_dir="$(cd -P "$(dirname -- "${script_path}")" >/dev/null 2>&1 && pwd)"
 ## Build and Test for Avaota-A1
 script=avaota
 log_file=/tmp/daily-test-$script
-$script_dir/build-test.sh $script $log_file
+echo >$log_file
+$script_dir/build-test.sh $script $log_file || true
 cat $log_file | \
   gh gist create \
   --public \
@@ -34,7 +35,8 @@ cat $log_file | \
 ## Build and Test for StarPro64
 script=starpro64
 log_file=/tmp/daily-test-$script
-$script_dir/build-test.sh $script $log_file
+echo >$log_file
+$script_dir/build-test.sh $script $log_file || true
 cat $log_file | \
   gh gist create \
   --public \
