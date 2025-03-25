@@ -42,3 +42,14 @@ cat $log_file | \
   --public \
   --desc "Daily Build and Test for StarPro64 EIC7700X SBC" \
   --filename "daily-build-test-$script.log"
+
+## Build and Test for Oz64
+script=oz64
+log_file=/tmp/daily-test-$script
+echo >$log_file
+$script_dir/build-test.sh $script $log_file || true
+cat $log_file | \
+  gh gist create \
+  --public \
+  --desc "Daily Build and Test for Oz64 SG2000 SBC" \
+  --filename "daily-build-test-$script.log"
