@@ -87,10 +87,10 @@ send -s "hello\r"
 expect "nsh> "
 send -s "getprime\r"
 
-## Wait for the prompt and enter `time sleep 10`
+## Wait for the prompt and enter `time "sleep 10"`
 expect "nsh> "
 system "date"
-send -s "time sleep 10\r"
+send -s "time \"sleep 10\"\r"
 system "date"
 
 ## Wait for the prompt and enter `ostest`
