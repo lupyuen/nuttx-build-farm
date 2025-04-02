@@ -91,7 +91,11 @@ send -s "getprime\r"
 expect "nsh> "
 system "date"
 send -s "time \"sleep 10\"\r"
+
+## Wait for the prompt and print the current time
+expect "nsh> "
 system "date"
+send -s "\r"
 
 ## Wait for the prompt and enter `ostest`
 expect "nsh> "
