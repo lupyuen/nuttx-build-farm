@@ -8,8 +8,9 @@ echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/build-te
 set -e  #  Exit when any command fails
 set -x  #  Echo commands
 
-## Server that controls StarPro64
-export STARPRO64_SERVER=tftpserver
+## Server that controls StarPro64. And the TFTP Server.
+export STARPRO64_SERVER=thinkcentre
+export TFTP_SERVER=tftpserver
 
 nuttx_hash=$1  ## Optional NuttX Hash (HEAD)
 apps_hash=$2   ## Optional Apps Hash (HEAD)
@@ -106,8 +107,8 @@ cat nuttx.bin /tmp/nuttx.pad initrd \
   >Image
 
 ## Copy the NuttX Image to TFTP Server
-scp Image $STARPRO64_SERVER:/tftpboot/Image-starpro64
-ssh $STARPRO64_SERVER ls -l /tftpboot/Image-starpro64
+scp Image $TFTP_SERVER:/tftpboot/Image-starpro64
+ssh $TFTP_SERVER ls -l /tftpboot/Image-starpro64
 
 ## Run the NuttX Test
 cd $script_dir
