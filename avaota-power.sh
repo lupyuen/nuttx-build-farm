@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ## Power Avaota-A1 On or Off
-## ./avaota-power on
-## ./avaota-power off
+## ./avaota-power.sh on
+## ./avaota-power.sh off
 echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/avaota-power.sh $1"
 
 set -e  ## Exit when any command fails

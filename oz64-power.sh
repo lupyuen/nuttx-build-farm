@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ## Power Oz64 On or Off
-## ./oz64-power on
-## ./oz64-power off
+## ./oz64-power.sh on
+## ./oz64-power.sh off
 echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/oz64-power.sh $1"
 
 set -e  ## Exit when any command fails

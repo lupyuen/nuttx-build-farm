@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ## Power StarPro64 On or Off
-## ./starpro64-power on
-## ./starpro64-power off
+## ./starpro64-power.sh on
+## ./starpro64-power.sh off
 echo "Now running https://github.com/lupyuen/nuttx-build-farm/blob/main/starpro64-power.sh $1"
 
 set -e  ## Exit when any command fails
